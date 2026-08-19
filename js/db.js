@@ -87,10 +87,21 @@ async function limparMetaPeso() {
   await db.meta.delete('meta_peso');
 }
 
+// Letras de treino que a pessoa realmente usa (A/B, A/B/C, ate A-E),
+// na ordem canonica — cada instalacao pode ter um split diferente.
+async function treinosDisponiveis() {
+  const exercicios = await db.exercicios.toArray();
+  const presentes = new Set(exercicios.map(e => e.treino));
+  const ordem = TREINO_ORDER.filter(t => presentes.has(t));
+  return ordem.length ? ordem : ['A'];
+}
+
 async function proximoTreinoSugerido() {
+  const disponiveis = await treinosDisponiveis();
   const ultimos = await db.registrosSeries.orderBy('data').reverse().limit(1).toArray();
-  if (ultimos.length === 0) return 'A';
+  if (ultimos.length === 0) return disponiveis[0];
   const ex = await db.exercicios.get(ultimos[0].exercicio_id);
-  const idx = TREINO_ORDER.indexOf(ex.treino);
-  return TREINO_ORDER[(idx + 1) % TREINO_ORDER.length];
+  const idx = ex ? disponiveis.indexOf(ex.treino) : -1;
+  if (idx === -1) return disponiveis[0];
+  return disponiveis[(idx + 1) % disponiveis.length];
 }

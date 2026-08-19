@@ -41,8 +41,10 @@ function limparRascunho(data, treino) {
 }
 
 async function renderHoje(container) {
+  const letrasDisponiveis = await treinosDisponiveis();
   const sugerido = await proximoTreinoSugerido();
   let treinoAtivo = state.treinoSelecionado || sugerido;
+  if (!letrasDisponiveis.includes(treinoAtivo)) treinoAtivo = letrasDisponiveis[0];
   state.treinoSelecionado = treinoAtivo;
 
   container.innerHTML = `
@@ -69,7 +71,7 @@ async function renderHoje(container) {
   `;
 
   const tabsEl = container.querySelector('#treino-tabs');
-  tabsEl.innerHTML = TREINO_LETTERS.map(t => `
+  tabsEl.innerHTML = letrasDisponiveis.map(t => `
     <button class="treino-tab treino-${t} ${t === treinoAtivo ? 'active' : ''}" data-treino="${t}">
       Treino ${t}
     </button>
