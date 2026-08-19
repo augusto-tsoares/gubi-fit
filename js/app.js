@@ -21,12 +21,26 @@ function temaInicial() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-function renderFaseBadge() {
-  const fase = faseAtual();
-  const badge = document.getElementById('fase-badge');
-  if (!fase) { badge.textContent = ''; return; }
-  badge.textContent = fase.nome;
-  badge.className = 'fase-badge ' + fase.tipo;
+async function renderFaseBadge() {
+  const select = document.getElementById('fase-select');
+  if (!select.dataset.montado) {
+    select.innerHTML = Object.values(FASES_INFO).map(f =>
+      `<option value="${f.tipo}">${f.nome}</option>`
+    ).join('');
+    select.dataset.montado = '1';
+    select.addEventListener('change', async () => {
+      await setFaseAtual(select.value);
+      atualizarClasseFaseBadge(select.value);
+      if (state.tela === 'peso') await renderTela('peso');
+    });
+  }
+  const tipoAtual = await getFaseAtual();
+  select.value = tipoAtual;
+  atualizarClasseFaseBadge(tipoAtual);
+}
+
+function atualizarClasseFaseBadge(tipo) {
+  document.getElementById('fase-select').className = 'fase-badge ' + tipo;
 }
 
 async function renderTela(nome) {
@@ -57,7 +71,7 @@ async function bootstrap() {
   await seedIfNeeded();
 
   montarNav();
-  renderFaseBadge();
+  await renderFaseBadge();
 
   document.getElementById('toggle-tema').addEventListener('click', () => {
     const atual = document.documentElement.getAttribute('data-theme');

@@ -12,12 +12,21 @@ db.version(1).stores({
 
 const TREINO_ORDER = ['A', 'B', 'C', 'D', 'E'];
 
-const FASES_SEED = [
-  { nome: 'Bulking moderado', data_inicio: '2026-08-19', data_fim: '2026-10-21', tipo: 'bulking' },
-  { nome: 'Cutting', data_inicio: '2026-10-21', data_fim: '2026-12-31', tipo: 'cutting' },
-  { nome: 'Manutenção magra', data_inicio: '2027-01-01', data_fim: '2027-02-09', tipo: 'manutencao' },
-  { nome: 'Bulking mais intenso', data_inicio: '2027-03-01', data_fim: '2099-01-01', tipo: 'bulking' }
-];
+const FASES_INFO = {
+  bulking: { tipo: 'bulking', nome: 'Bulking' },
+  cutting: { tipo: 'cutting', nome: 'Cutting' },
+  transicao: { tipo: 'transicao', nome: 'Transição' }
+};
+
+// Usado só para sugerir um valor inicial na primeira execução; depois disso
+// a fase passa a ser escolhida manualmente e fica salva em db.meta.
+function faseSugeridaPorData(dataRef = new Date()) {
+  const iso = dataRef.toISOString().slice(0, 10);
+  if (iso >= '2026-08-19' && iso < '2026-10-21') return 'bulking';
+  if (iso >= '2026-10-21' && iso < '2027-01-01') return 'cutting';
+  if (iso >= '2027-01-01' && iso < '2027-02-09') return 'transicao';
+  return 'bulking';
+}
 
 const BASELINE_PESO = { data: '2026-08-19', peso_kg: 69.8 };
 const BASELINE_MEDIDAS = {
@@ -32,7 +41,7 @@ async function seedIfNeeded() {
 
   const raw = await fetch('dados-historicos.json').then(r => r.json());
 
-  await db.transaction('rw', db.exercicios, db.registrosSeries, db.registrosPeso, db.fasesPlano, db.meta, async () => {
+  await db.transaction('rw', db.exercicios, db.registrosSeries, db.registrosPeso, db.meta, async () => {
     for (const ex of raw.exercicios) {
       const exId = await db.exercicios.add({
         treino: ex.treino,
@@ -62,8 +71,6 @@ async function seedIfNeeded() {
       }
     }
 
-    for (const f of FASES_SEED) await db.fasesPlano.add(f);
-
     for (const semana of raw.acompanhamento_semanal) {
       if (typeof semana.peso_kg === 'number') {
         await db.registrosPeso.add({ data: semana.data, peso_kg: semana.peso_kg });
@@ -86,9 +93,16 @@ function parseRepsHistorico(reps) {
   return nums;
 }
 
-function faseAtual(dataRef = new Date()) {
-  const iso = dataRef.toISOString().slice(0, 10);
-  return FASES_SEED.find(f => iso >= f.data_inicio && iso < f.data_fim) || null;
+async function getFaseAtual() {
+  const registro = await db.meta.get('fase_atual');
+  if (registro) return registro.valor;
+  const sugerida = faseSugeridaPorData();
+  await db.meta.put({ chave: 'fase_atual', valor: sugerida });
+  return sugerida;
+}
+
+async function setFaseAtual(tipoFase) {
+  await db.meta.put({ chave: 'fase_atual', valor: tipoFase });
 }
 
 async function proximoTreinoSugerido() {

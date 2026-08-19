@@ -108,21 +108,26 @@ button, input, select {
 }
 
 .fase-badge {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  font: inherit;
   font-size: 11px;
+  font-weight: 600;
   padding: 4px 10px;
   border-radius: 999px;
   background: var(--header-secondary-bg);
   color: var(--header-fg);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   min-width: 0;
+  max-width: 110px;
   flex-shrink: 1;
+  cursor: pointer;
 }
 .fase-badge.bulking { color: var(--fase-bulking); }
 .fase-badge.transicao { color: var(--fase-transicao); }
 .fase-badge.cutting { color: var(--fase-cutting); }
-.fase-badge.manutencao { color: #CFE2F3; }
+.fase-badge option { color: #222; }
 
 main {
   padding: 16px;

@@ -50,7 +50,7 @@ async function desenharGraficoPeso(container) {
   const labels = registros.map(r => formatarDataBr(r.data));
   const valores = registros.map(r => r.peso_kg);
 
-  const metaAtual = calcularMetaPesoFaseAtual(registros);
+  const metaAtual = await calcularMetaPesoFaseAtual(registros);
   const linhaMeta = registros.map(() => metaAtual);
 
   const ctx = container.querySelector('#peso-chart').getContext('2d');
@@ -95,27 +95,25 @@ async function desenharGraficoPeso(container) {
   });
 }
 
-function calcularMetaPesoFaseAtual(registrosPeso) {
-  const fase = faseAtual();
-  if (!fase) return null;
+async function calcularMetaPesoFaseAtual(registrosPeso) {
+  const tipoFase = await getFaseAtual();
   const ultimoRegistro = [...registrosPeso].reverse().find(r => r.peso_kg != null);
   const pesoBase = ultimoRegistro ? ultimoRegistro.peso_kg : BASELINE_PESO.peso_kg;
-  if (fase.tipo === 'bulking') return +(pesoBase + 0.3).toFixed(1);
-  if (fase.tipo === 'cutting') return +(pesoBase * 0.995).toFixed(1);
+  if (tipoFase === 'bulking') return +(pesoBase + 0.3).toFixed(1);
+  if (tipoFase === 'cutting') return +(pesoBase * 0.995).toFixed(1);
   return pesoBase;
 }
 
 async function renderResumoPeso(container) {
-  const fase = faseAtual();
+  const tipoFase = await getFaseAtual();
   const registros = await db.registrosPeso.orderBy('data').toArray();
   const ultimo = [...registros].reverse().find(r => r.peso_kg != null);
-  const meta = calcularMetaPesoFaseAtual(registros);
+  const meta = await calcularMetaPesoFaseAtual(registros);
 
   const el = container.querySelector('#peso-resumo');
   el.innerHTML = `
     <h2>Fase atual</h2>
-    <div class="stat-row"><span class="stat-label">Fase</span><span class="stat-value">${fase ? fase.nome : '—'}</span></div>
-    <div class="stat-row"><span class="stat-label">Período</span><span class="stat-value">${fase ? `${formatarDataBr(fase.data_inicio)} – ${formatarDataBr(fase.data_fim)}` : '—'}</span></div>
+    <div class="stat-row"><span class="stat-label">Fase</span><span class="stat-value">${FASES_INFO[tipoFase].nome}</span></div>
     <div class="stat-row"><span class="stat-label">Peso atual</span><span class="stat-value">${ultimo ? ultimo.peso_kg + ' kg' : '—'}</span></div>
     <div class="stat-row"><span class="stat-label">Referência semanal</span><span class="stat-value">${meta != null ? meta + ' kg' : '—'}</span></div>
   `;
