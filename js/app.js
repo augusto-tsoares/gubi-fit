@@ -44,6 +44,10 @@ function atualizarClasseFaseBadge(tipo) {
   document.getElementById('fase-select').className = 'fase-badge ' + tipo;
 }
 
+function renderSubheader() {
+  document.getElementById('app-subheader').textContent = `Semana ${semanaAtual()}`;
+}
+
 async function renderTela(nome) {
   state.tela = nome;
   const main = document.getElementById('main-content');
@@ -73,6 +77,7 @@ async function bootstrap() {
 
   montarNav();
   await renderFaseBadge();
+  renderSubheader();
 
   document.getElementById('toggle-tema').addEventListener('click', () => {
     const atual = document.documentElement.getAttribute('data-theme');

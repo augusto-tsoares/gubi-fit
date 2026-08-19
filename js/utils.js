@@ -4,6 +4,13 @@ function hoje() {
   return new Date().toISOString().slice(0, 10);
 }
 
+// Continua a numeracao de semanas da planilha original (semana 1 = 12/01/2026).
+function semanaAtual(dataRef = new Date()) {
+  const ancora = new Date('2026-01-12T00:00:00');
+  const diffDias = Math.floor((dataRef - ancora) / (1000 * 60 * 60 * 24));
+  return Math.floor(diffDias / 7) + 1;
+}
+
 function formatarDataBr(iso) {
   const [y, m, d] = iso.split('-');
   return `${d}/${m}/${y}`;
