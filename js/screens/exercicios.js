@@ -2,8 +2,9 @@ async function renderExercicios(container) {
   container.innerHTML = `
     <div class="card">
       <h2>Dados</h2>
+      <p class="ajuda-texto">O botão abaixo importa o histórico real de treino e peso de jan-mai/2026 já registrado nesse app — não é um exemplo genérico, é dado de treino de verdade. Só faz sentido usar se esse histórico for seu.</p>
       <div class="config-actions">
-        <button class="btn-primary" id="btn-importar-historico" type="button">Importar histórico de exemplo</button>
+        <button class="btn-primary" id="btn-importar-historico" type="button">Importar meu histórico (jan-mai/2026)</button>
         <button class="btn-primary" id="btn-exportar-treinos" type="button">Exportar treinos (CSV)</button>
         <button class="btn-primary" id="btn-exportar-peso" type="button">Exportar peso (CSV)</button>
       </div>
@@ -20,13 +21,13 @@ async function renderExercicios(container) {
   const btnImportar = container.querySelector('#btn-importar-historico');
   if (await jaImportouHistorico()) {
     btnImportar.disabled = true;
-    btnImportar.textContent = 'Histórico de exemplo já importado';
+    btnImportar.textContent = 'Histórico já importado';
   }
   btnImportar.addEventListener('click', async () => {
     const resultado = await importarHistoricoExemplo();
     if (resultado.ok) {
       btnImportar.disabled = true;
-      btnImportar.textContent = 'Histórico de exemplo já importado';
+      btnImportar.textContent = 'Histórico já importado';
       mostrarToastConfig(container, 'Histórico importado!');
     } else {
       mostrarToastConfig(container, 'Esse histórico já tinha sido importado antes.');
