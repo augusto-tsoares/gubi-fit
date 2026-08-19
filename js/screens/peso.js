@@ -1,6 +1,8 @@
 let pesoChartInstance = null;
 
 async function renderPeso(container) {
+  if (!state.pesoJanelaMeses) state.pesoJanelaMeses = 12;
+
   container.innerHTML = `
     <div class="card">
       <h2>Registrar peso de hoje</h2>
@@ -11,7 +13,15 @@ async function renderPeso(container) {
       </div>
     </div>
     <div class="card">
-      <h2>Evolução</h2>
+      <div class="card-header-row">
+        <h2>Evolução</h2>
+        <select class="janela-select" id="peso-janela">
+          <option value="1">1 mês</option>
+          <option value="3">3 meses</option>
+          <option value="6">6 meses</option>
+          <option value="12">1 ano</option>
+        </select>
+      </div>
       <canvas id="peso-chart" height="220"></canvas>
     </div>
     <div class="card" id="peso-resumo"></div>
@@ -19,6 +29,13 @@ async function renderPeso(container) {
   `;
 
   container.querySelector('#peso-salvar').addEventListener('click', () => salvarPeso(container));
+
+  const janelaSelect = container.querySelector('#peso-janela');
+  janelaSelect.value = String(state.pesoJanelaMeses);
+  janelaSelect.addEventListener('change', () => {
+    state.pesoJanelaMeses = parseInt(janelaSelect.value, 10);
+    desenharGraficoPeso(container);
+  });
 
   await desenharGraficoPeso(container);
   await renderResumoPeso(container);
@@ -46,12 +63,17 @@ async function salvarPeso(container) {
 }
 
 async function desenharGraficoPeso(container) {
-  const registros = await db.registrosPeso.orderBy('data').toArray();
-  const labels = registros.map(r => formatarDataBr(r.data));
-  const valores = registros.map(r => r.peso_kg);
+  const todosRegistros = await db.registrosPeso.orderBy('data').toArray();
+  const metaAtual = await calcularMetaPesoFaseAtual(todosRegistros);
 
-  const metaAtual = await calcularMetaPesoFaseAtual(registros);
-  const linhaMeta = registros.map(() => metaAtual);
+  const janela = calcularJanela(state.pesoJanelaMeses);
+  const ticks = gerarTimelineSemanal(janela.inicio, janela.fim);
+  const valores = encaixarNaTimeline(
+    todosRegistros.map(r => ({ data: r.data, valor: r.peso_kg })),
+    ticks
+  );
+  const labels = ticks.map(formatarDataBr);
+  const linhaMeta = valores.map(() => metaAtual);
 
   const ctx = container.querySelector('#peso-chart').getContext('2d');
   if (pesoChartInstance) pesoChartInstance.destroy();
@@ -69,7 +91,7 @@ async function desenharGraficoPeso(container) {
           data: valores,
           borderColor: '#666666',
           backgroundColor: 'rgba(102,102,102,0.15)',
-          spanGaps: true,
+          spanGaps: false,
           tension: 0.25,
           pointRadius: 2
         },

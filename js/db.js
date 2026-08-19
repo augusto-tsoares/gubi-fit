@@ -35,35 +35,60 @@ const BASELINE_MEDIDAS = {
   panturrilha_cm: 35, peito_cm: 96, busto_cm: 121, biceps_cm: 33
 };
 
+// Roda em toda instalacao nova (inclusive a de um amigo que abrir o link):
+// so cadastra a biblioteca de exercicios/treinos, sem nenhum dado pessoal.
 async function seedIfNeeded() {
-  const done = await db.meta.get('seed_v1');
-  if (done) return;
+  const jaTemExercicios = (await db.exercicios.count()) > 0;
+  if (jaTemExercicios) return;
+
+  const raw = await fetch('dados-historicos.json').then(r => r.json());
+  await db.exercicios.bulkAdd(raw.exercicios.map(ex => ({
+    treino: ex.treino,
+    nome: ex.exercicio,
+    series_alvo: ex.series_alvo,
+    reps_alvo: ex.reps_alvo,
+    descanso: ex.descanso,
+    nota: ex.nota || ''
+  })));
+}
+
+// Fluxo antigo (antes de separar exercicios de historico) ja importava tudo
+// de uma vez sob a flag 'seed_v1' — trata isso como "ja importado" pra nao
+// duplicar os dados de quem instalou o app antes dessa mudanca.
+async function jaImportouHistorico() {
+  if (await db.meta.get('historico_importado')) return true;
+  if (await db.meta.get('seed_v1')) {
+    await db.meta.put({ chave: 'historico_importado', valor: true });
+    return true;
+  }
+  return false;
+}
+
+// Import manual e opcional do historico de exemplo (carga/peso de jan-mai/2026).
+// So faz sentido pra quem quer ver o app populado com dados reais de exemplo;
+// amigos que forem usar o app do zero nao precisam disso.
+async function importarHistoricoExemplo() {
+  if (await jaImportouHistorico()) return { ok: false, motivo: 'ja_importado' };
 
   const raw = await fetch('dados-historicos.json').then(r => r.json());
 
   await db.transaction('rw', db.exercicios, db.registrosSeries, db.registrosPeso, db.meta, async () => {
     for (const ex of raw.exercicios) {
-      const exId = await db.exercicios.add({
-        treino: ex.treino,
-        nome: ex.exercicio,
-        series_alvo: ex.series_alvo,
-        reps_alvo: ex.reps_alvo,
-        descanso: ex.descanso,
-        nota: ex.nota || ''
-      });
+      const exercicioLocal = await db.exercicios.where({ treino: ex.treino, nome: ex.exercicio }).first();
+      if (!exercicioLocal) continue;
 
       for (const h of (ex.historico || [])) {
         if (h.carga_kg == null && h.reps == null) continue;
         const repsList = parseRepsHistorico(h.reps);
         if (repsList.length === 0) {
           await db.registrosSeries.add({
-            exercicio_id: exId, data: h.data, semana_treino: h.semana,
+            exercicio_id: exercicioLocal.id, data: h.data, semana_treino: h.semana,
             numero_serie: 1, carga_kg: h.carga_kg ?? null, reps: null
           });
         } else {
           for (let i = 0; i < repsList.length; i++) {
             await db.registrosSeries.add({
-              exercicio_id: exId, data: h.data, semana_treino: h.semana,
+              exercicio_id: exercicioLocal.id, data: h.data, semana_treino: h.semana,
               numero_serie: i + 1, carga_kg: h.carga_kg ?? null, reps: repsList[i]
             });
           }
@@ -79,9 +104,11 @@ async function seedIfNeeded() {
     const existeBaseline = await db.registrosPeso.where('data').equals(BASELINE_PESO.data).count();
     if (!existeBaseline) await db.registrosPeso.add(BASELINE_PESO);
 
-    await db.meta.put({ chave: 'seed_v1', valor: true });
+    await db.meta.put({ chave: 'historico_importado', valor: true });
     await db.meta.put({ chave: 'baseline_medidas', valor: BASELINE_MEDIDAS });
   });
+
+  return { ok: true };
 }
 
 // Converte campos "reps" do histórico (numero, string "8;7;6" ou texto tipo "CARNAVAL") em array de numeros

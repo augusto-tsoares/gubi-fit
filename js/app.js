@@ -7,7 +7,8 @@ const state = {
 const TELAS = {
   hoje: { titulo: 'Hoje', render: renderHoje },
   peso: { titulo: 'Peso', render: renderPeso },
-  historico: { titulo: 'Histórico', render: renderHistorico }
+  historico: { titulo: 'Histórico', render: renderHistorico },
+  exercicios: { titulo: 'Exercícios', render: renderExercicios }
 };
 
 function aplicarTema(tema) {

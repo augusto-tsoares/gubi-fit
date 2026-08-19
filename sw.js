@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gubi-fit-v4';
+const CACHE_NAME = 'gubi-fit-v5';
 const APP_SHELL = [
   './',
   './index.html',
@@ -10,6 +10,7 @@ const APP_SHELL = [
   './js/screens/hoje.js',
   './js/screens/peso.js',
   './js/screens/historico.js',
+  './js/screens/exercicios.js',
   './vendor/dexie.min.js',
   './vendor/chart.umd.min.js',
   './dados-historicos.json',

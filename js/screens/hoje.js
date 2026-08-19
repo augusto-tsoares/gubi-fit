@@ -57,14 +57,16 @@ async function renderExercicioCard(ex) {
   const datas = Object.keys(grupos).sort();
   const ultimaData = datas[datas.length - 1];
   const seriesUltima = ultimaData ? grupos[ultimaData].sort((a, b) => a.numero_serie - b.numero_serie) : [];
+  const cargasHistoricas = todosRegistros.map(r => r.carga_kg).filter(c => Number.isFinite(c));
+  const cargaMaximaHistorica = cargasHistoricas.length ? Math.max(...cargasHistoricas) : null;
 
-  const sugestao = sugerirCarga(ex, seriesUltima);
+  const sugestao = sugerirCarga(ex, seriesUltima, cargaMaximaHistorica);
   const treinoCorVar = `var(--treino-${ex.treino.toLowerCase()}-bg)`;
 
   const numSeriesIniciais = Math.max(ex.series_alvo || 3, 1);
   const linhasIniciais = [];
   for (let i = 1; i <= numSeriesIniciais; i++) {
-    const cargaSugerida = sugestao.carga_sugerida != null ? sugestao.carga_sugerida : '';
+    const cargaSugerida = Number.isFinite(sugestao.carga_sugerida) ? sugestao.carga_sugerida : '';
     linhasIniciais.push(linhaSerieHtml(i, cargaSugerida, ''));
   }
 
