@@ -1,5 +1,5 @@
 const TREINO_LETTERS = ['A', 'B', 'C', 'D', 'E'];
-const TIPOS_CARDIO = ['Esteira', 'Bike', 'Elíptico', 'Corrida (rua)', 'Outro'];
+const TIPOS_CARDIO = ['Esteira', 'Bike', 'Elíptico', 'Corrida (rua)', 'Escada', 'Pular corda', 'Outro'];
 
 async function renderHoje(container) {
   const sugerido = await proximoTreinoSugerido();

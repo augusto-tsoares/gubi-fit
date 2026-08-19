@@ -388,6 +388,13 @@ main {
   letter-spacing: 0.4px;
 }
 
+.cardio-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cardio-card h2 { margin-bottom: 0; }
+
 .form-row {
   display: flex;
   flex-wrap: wrap;
