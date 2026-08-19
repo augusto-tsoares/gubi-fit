@@ -1,5 +1,6 @@
 async function renderExercicios(container) {
   container.innerHTML = `
+    <p class="aviso-armazenamento">Os dados deste app ficam armazenados apenas no navegador deste aparelho (não em um servidor). Limpar o cache/dados do navegador apaga tudo. Para evitar perda, recomendamos exportar o histórico (CSV) de vez em quando.</p>
     <div class="card">
       <h2>Importar histórico (CSV)</h2>
       <p class="ajuda-texto">Cada pessoa importa o próprio arquivo. Baixe um modelo em branco se for preencher do zero, ou exporte o seu daqui de baixo pra editar/guardar. O import não duplica: se uma linha já existe (mesma data/exercício/série), ela é ignorada.</p>
