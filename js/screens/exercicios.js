@@ -73,12 +73,50 @@ async function renderListaExercicios(container) {
     const id = parseInt(card.dataset.id, 10);
     card.querySelector('.btn-salvar-exercicio').addEventListener('click', () => salvarExercicio(container, card, id));
     card.querySelector('.btn-excluir-exercicio').addEventListener('click', () => excluirExercicio(container, id));
+    card.querySelector('.edit-nome-picker').addEventListener('change', (e) => {
+      const valor = e.target.value;
+      const inputNome = card.querySelector('.edit-nome');
+      if (valor && valor !== 'Outro') {
+        inputNome.value = valor;
+      }
+      if (valor === 'Outro') {
+        inputNome.focus();
+      }
+    });
   });
+}
+
+const EXERCICIOS_COMUNS = {
+  'Peito': ['Supino Reto (Barra)', 'Supino Reto (Halteres)', 'Supino Inclinado (Barra)', 'Supino Inclinado (Halteres)', 'Supino Declinado', 'Crucifixo (Halteres)', 'Crossover (Polia)', 'Peck Deck (Voador)', 'Flexão de Braço'],
+  'Costas': ['Puxada Alta (Pulley)', 'Puxada Alta (Pegada Fechada)', 'Remada Curvada (Barra)', 'Remada Cavalinho', 'Remada Unilateral (Serrote)', 'Remada Baixa (Polia)', 'Pull-over', 'Barra Fixa'],
+  'Ombro': ['Desenvolvimento Militar (Barra)', 'Desenvolvimento com Halteres', 'Elevação Lateral', 'Elevação Frontal', 'Elevação Posterior (Voador Invertido)', 'Encolhimento de Ombros (Trapézio)'],
+  'Bíceps': ['Rosca Direta (Barra)', 'Rosca Alternada (Halteres)', 'Rosca Martelo', 'Rosca Scott', 'Rosca Concentrada'],
+  'Tríceps': ['Tríceps Testa', 'Tríceps Corda (Polia)', 'Tríceps Francês', 'Tríceps Coice', 'Mergulho no Banco'],
+  'Perna': ['Agachamento Livre', 'Agachamento no Smith', 'Agachamento Búlgaro', 'Leg Press 45º', 'Cadeira Extensora', 'Mesa Flexora', 'Cadeira Flexora', 'Stiff (RDL)', 'Afundo (Passada)'],
+  'Glúteo': ['Elevação Pélvica (Hip Thrust)', 'Cadeira Abdutora', 'Cadeira Adutora', 'Glúteo na Polia (Coice)'],
+  'Panturrilha': ['Panturrilha em Pé', 'Panturrilha Sentado', 'Panturrilha no Leg Press'],
+  'Abdômen': ['Abdominal Supra', 'Abdominal na Polia (Crunch)', 'Elevação de Pernas', 'Prancha Isométrica', 'Abdominal Infra']
+};
+
+function opcoesExerciciosComunsHtml() {
+  const grupos = Object.entries(EXERCICIOS_COMUNS).map(([grupo, nomes]) => `
+    <optgroup label="${grupo}">
+      ${nomes.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('')}
+    </optgroup>
+  `).join('');
+  return `
+    <option value="">Escolher da lista de exercícios comuns...</option>
+    ${grupos}
+    <option value="Outro">Outro (digitar abaixo)</option>
+  `;
 }
 
 function exercicioEditCardHtml(ex) {
   return `
     <div class="exercicio-edit-card" data-id="${ex.id}">
+      <select class="edit-nome-picker">
+        ${opcoesExerciciosComunsHtml()}
+      </select>
       <div class="edit-row">
         <select class="edit-treino">
           ${TREINO_LETTERS.map(t => `<option value="${t}" ${t === ex.treino ? 'selected' : ''}>Treino ${t}</option>`).join('')}

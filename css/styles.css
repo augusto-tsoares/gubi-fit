@@ -567,6 +567,16 @@ canvas { max-width: 100%; }
   gap: 8px;
 }
 
+.edit-nome-picker {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--row-even);
+  color: var(--row-fg);
+  font-size: 13.5px;
+}
+
 .edit-row {
   display: flex;
   flex-wrap: wrap;
