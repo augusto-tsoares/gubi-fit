@@ -2,6 +2,7 @@ let pesoChartInstance = null;
 
 async function renderPeso(container) {
   if (!state.pesoJanelaMeses) state.pesoJanelaMeses = 12;
+  if (!state.pesoFaseFiltro) state.pesoFaseFiltro = 'todas';
 
   const registrosExistentes = await db.registrosPeso.orderBy('data').toArray();
   const ultimoRegistro = [...registrosExistentes].reverse().find(r => r.peso_kg != null);
@@ -23,12 +24,18 @@ async function renderPeso(container) {
     <div class="card">
       <div class="card-header-row">
         <h2>Evolução</h2>
-        <select class="janela-select" id="peso-janela">
-          <option value="1">1 mês</option>
-          <option value="3">3 meses</option>
-          <option value="6">6 meses</option>
-          <option value="12">1 ano</option>
-        </select>
+        <div class="filtros-peso">
+          <select class="janela-select" id="peso-fase-filtro">
+            <option value="todas">Todas as fases</option>
+            ${Object.values(FASES_INFO).map(f => `<option value="${f.tipo}">${f.nome}</option>`).join('')}
+          </select>
+          <select class="janela-select" id="peso-janela">
+            <option value="1">1 mês</option>
+            <option value="3">3 meses</option>
+            <option value="6">6 meses</option>
+            <option value="12">1 ano</option>
+          </select>
+        </div>
       </div>
       <canvas id="peso-chart" height="220"></canvas>
     </div>
@@ -44,6 +51,14 @@ async function renderPeso(container) {
   janelaSelect.addEventListener('change', () => {
     state.pesoJanelaMeses = parseInt(janelaSelect.value, 10);
     desenharGraficoPeso(container);
+  });
+
+  const faseFiltroSelect = container.querySelector('#peso-fase-filtro');
+  faseFiltroSelect.value = state.pesoFaseFiltro;
+  faseFiltroSelect.addEventListener('change', () => {
+    state.pesoFaseFiltro = faseFiltroSelect.value;
+    desenharGraficoPeso(container);
+    renderTabelaPeso(container);
   });
 
   await renderMetaPeso(container);
@@ -132,7 +147,11 @@ async function salvarMetaPeso(container) {
 }
 
 async function desenharGraficoPeso(container) {
-  const todosRegistros = await db.registrosPeso.orderBy('data').toArray();
+  const todosRegistrosGeral = await db.registrosPeso.orderBy('data').toArray();
+  const filtro = state.pesoFaseFiltro || 'todas';
+  const todosRegistros = filtro === 'todas'
+    ? todosRegistrosGeral
+    : todosRegistrosGeral.filter(r => r.fase === filtro);
   const meta = await getMetaPeso();
 
   const janela = calcularJanela(state.pesoJanelaMeses);
@@ -162,7 +181,7 @@ async function desenharGraficoPeso(container) {
     linhaMeta = ticks.map(t => pesoTrajetoriaMeta(meta, t));
     labelMeta = `Meta (${meta.peso_alvo}kg até ${formatarDataBr(meta.data_alvo)})`;
   } else {
-    const metaFase = await calcularMetaPesoFaseAtual(todosRegistros);
+    const metaFase = await calcularMetaPesoFaseAtual(todosRegistrosGeral);
     if (metaFase != null) {
       linhaMeta = valores.map(() => metaFase);
       labelMeta = 'Referência da fase';
@@ -240,11 +259,15 @@ async function renderResumoPeso(container) {
 }
 
 async function renderTabelaPeso(container) {
-  const registros = await db.registrosPeso.orderBy('data').reverse().limit(15).toArray();
+  const filtro = state.pesoFaseFiltro || 'todas';
+  const todos = await db.registrosPeso.orderBy('data').reverse().toArray();
+  const registros = (filtro === 'todas' ? todos : todos.filter(r => r.fase === filtro)).slice(0, 15);
   const el = container.querySelector('#peso-tabela');
 
+  const titulo = filtro === 'todas' ? 'Últimas pesagens' : `Últimas pesagens — ${FASES_INFO[filtro].nome}`;
+
   if (registros.length === 0) {
-    el.innerHTML = `<div class="empty-state">Nenhum peso registrado ainda.</div>`;
+    el.innerHTML = `<h2>${titulo}</h2><div class="empty-state">Nenhum peso registrado ${filtro === 'todas' ? 'ainda' : 'nessa fase'}.</div>`;
     return;
   }
 
@@ -257,7 +280,7 @@ async function renderTabelaPeso(container) {
   `).join('');
 
   el.innerHTML = `
-    <h2>Últimas pesagens</h2>
+    <h2>${titulo}</h2>
     <table class="history-table">
       <thead><tr><th>Data</th><th>Peso</th><th>Fase</th></tr></thead>
       <tbody>${linhas}</tbody>
