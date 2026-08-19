@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gubi-fit-v17';
+const CACHE_NAME = 'gubi-fit-v18';
 const APP_SHELL = [
   './',
   './index.html',

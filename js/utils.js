@@ -119,13 +119,14 @@ function gerarTimelineSemanal(inicioISO, fimISO) {
   const d = new Date(ancora);
   d.setDate(d.getDate() + semanasCompletas * 7);
 
+  // Sempre fecha no proximo tique alinhado a grade (>= fimISO), nunca em
+  // fimISO cru — senao o ultimo intervalo ficava bem menor que 7 dias
+  // (ex: so 2 dias), espremendo visualmente o fim do grafico.
   const ticks = [];
-  const fim = new Date(fimISO + 'T00:00:00');
-  while (d <= fim) {
+  do {
     ticks.push(d.toISOString().slice(0, 10));
     d.setDate(d.getDate() + 7);
-  }
-  if (ticks.length === 0 || ticks[ticks.length - 1] < fimISO) ticks.push(fimISO);
+  } while (ticks[ticks.length - 1] < fimISO);
   return ticks;
 }
 
