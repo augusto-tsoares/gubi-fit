@@ -1,14 +1,24 @@
 async function renderExercicios(container) {
   container.innerHTML = `
     <div class="card">
-      <h2>Dados</h2>
-      <p class="ajuda-texto">O botão abaixo importa o histórico real de treino e peso de jan-mai/2026 já registrado nesse app — não é um exemplo genérico, é dado de treino de verdade. Só faz sentido usar se esse histórico for seu.</p>
+      <h2>Importar histórico (CSV)</h2>
+      <p class="ajuda-texto">Cada pessoa importa o próprio arquivo. Baixe um modelo em branco se for preencher do zero, ou exporte o seu daqui de baixo pra editar/guardar. O import não duplica: se uma linha já existe (mesma data/exercício/série), ela é ignorada.</p>
       <div class="config-actions">
-        <button class="btn-primary" id="btn-importar-historico" type="button">Importar meu histórico (jan-mai/2026)</button>
-        <button class="btn-primary" id="btn-exportar-treinos" type="button">Exportar treinos (CSV)</button>
-        <button class="btn-primary" id="btn-exportar-peso" type="button">Exportar peso (CSV)</button>
+        <label class="btn-primary file-btn" for="input-importar-treinos">Importar treinos (CSV)</label>
+        <input type="file" id="input-importar-treinos" accept=".csv,text/csv" class="visually-hidden">
+        <label class="btn-primary file-btn" for="input-importar-peso">Importar peso (CSV)</label>
+        <input type="file" id="input-importar-peso" accept=".csv,text/csv" class="visually-hidden">
       </div>
       <div class="toast" id="toast-config">Feito!</div>
+    </div>
+    <div class="card">
+      <h2>Modelos e exportação</h2>
+      <div class="config-actions">
+        <button class="btn-primary" id="btn-modelo-treinos" type="button">Baixar modelo de treinos (CSV)</button>
+        <button class="btn-primary" id="btn-modelo-peso" type="button">Baixar modelo de peso (CSV)</button>
+        <button class="btn-primary" id="btn-exportar-treinos" type="button">Exportar meus treinos (CSV)</button>
+        <button class="btn-primary" id="btn-exportar-peso" type="button">Exportar meu peso (CSV)</button>
+      </div>
     </div>
     <div class="card">
       <h2>Exercícios por treino</h2>
@@ -18,22 +28,21 @@ async function renderExercicios(container) {
     </div>
   `;
 
-  const btnImportar = container.querySelector('#btn-importar-historico');
-  if (await jaImportouHistorico()) {
-    btnImportar.disabled = true;
-    btnImportar.textContent = 'Histórico já importado';
-  }
-  btnImportar.addEventListener('click', async () => {
-    const resultado = await importarHistoricoExemplo();
-    if (resultado.ok) {
-      btnImportar.disabled = true;
-      btnImportar.textContent = 'Histórico já importado';
-      mostrarToastConfig(container, 'Histórico importado!');
-    } else {
-      mostrarToastConfig(container, 'Esse histórico já tinha sido importado antes.');
-    }
+  container.querySelector('#input-importar-treinos').addEventListener('change', async (e) => {
+    const arquivo = e.target.files[0];
+    e.target.value = '';
+    if (!arquivo) return;
+    await importarTreinosCSV(container, arquivo);
+  });
+  container.querySelector('#input-importar-peso').addEventListener('change', async (e) => {
+    const arquivo = e.target.files[0];
+    e.target.value = '';
+    if (!arquivo) return;
+    await importarPesoCSV(container, arquivo);
   });
 
+  container.querySelector('#btn-modelo-treinos').addEventListener('click', baixarModeloTreinos);
+  container.querySelector('#btn-modelo-peso').addEventListener('click', baixarModeloPeso);
   container.querySelector('#btn-exportar-treinos').addEventListener('click', exportarTreinosCSV);
   container.querySelector('#btn-exportar-peso').addEventListener('click', exportarPesoCSV);
   container.querySelector('#btn-add-exercicio').addEventListener('click', () => criarExercicioNovo(container));
@@ -171,4 +180,142 @@ function csvEscape(valor) {
   const s = String(valor ?? '');
   if (/[",;\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
   return s;
+}
+
+function baixarModeloTreinos() {
+  db.exercicios.orderBy('treino').toArray().then(exercicios => {
+    const linhas = [['data', 'treino', 'exercicio', 'numero_serie', 'carga_kg', 'reps']];
+    for (const ex of exercicios) {
+      linhas.push(['AAAA-MM-DD', ex.treino, ex.nome, 1, '', '']);
+    }
+    baixarCSV(linhas, 'modelo-treinos.csv');
+  });
+}
+
+function baixarModeloPeso() {
+  baixarCSV([['data', 'peso_kg'], ['AAAA-MM-DD', '']], 'modelo-peso.csv');
+}
+
+// Parser de CSV simples (RFC4180-ish): lida com campos entre aspas contendo
+// virgula, ponto-e-virgula ou quebra de linha.
+function parseCSV(texto) {
+  const linhas = texto.replace(/^﻿/, '').split(/\r\n|\n/).filter(l => l.trim() !== '');
+  return linhas.map(parseLinhaCSV);
+}
+
+function parseLinhaCSV(linha) {
+  const campos = [];
+  let atual = '';
+  let dentroAspas = false;
+  for (let i = 0; i < linha.length; i++) {
+    const c = linha[i];
+    if (dentroAspas) {
+      if (c === '"') {
+        if (linha[i + 1] === '"') { atual += '"'; i++; }
+        else dentroAspas = false;
+      } else {
+        atual += c;
+      }
+    } else if (c === '"') {
+      dentroAspas = true;
+    } else if (c === ',') {
+      campos.push(atual);
+      atual = '';
+    } else {
+      atual += c;
+    }
+  }
+  campos.push(atual);
+  return campos;
+}
+
+async function importarTreinosCSV(container, arquivo) {
+  const texto = await arquivo.text();
+  const linhas = parseCSV(texto);
+  if (linhas.length < 2) {
+    mostrarToastConfig(container, 'Arquivo vazio.');
+    return;
+  }
+  const cabecalho = linhas[0].map(h => h.trim().toLowerCase());
+  const idx = {
+    data: cabecalho.indexOf('data'),
+    treino: cabecalho.indexOf('treino'),
+    exercicio: cabecalho.indexOf('exercicio'),
+    numero_serie: cabecalho.indexOf('numero_serie'),
+    carga_kg: cabecalho.indexOf('carga_kg'),
+    reps: cabecalho.indexOf('reps')
+  };
+  if (idx.data === -1 || idx.exercicio === -1) {
+    mostrarToastConfig(container, 'Colunas esperadas: data,treino,exercicio,numero_serie,carga_kg,reps');
+    return;
+  }
+
+  const exercicios = await db.exercicios.toArray();
+  const chave = (treino, nome) => `${treino}|${nome}`.trim().toLowerCase();
+  const porChave = new Map(exercicios.map(e => [chave(e.treino, e.nome), e]));
+
+  let importados = 0, duplicados = 0, naoEncontrados = 0;
+  for (const linha of linhas.slice(1)) {
+    const data = linha[idx.data]?.trim();
+    if (!data || data === 'AAAA-MM-DD') continue;
+    const nomeExercicio = linha[idx.exercicio]?.trim();
+    const treino = linha[idx.treino]?.trim();
+    const numeroSerie = parseInt(linha[idx.numero_serie], 10) || 1;
+    const cargaTexto = linha[idx.carga_kg]?.trim();
+    const repsTexto = linha[idx.reps]?.trim();
+
+    const ex = porChave.get(chave(treino, nomeExercicio));
+    if (!ex) { naoEncontrados++; continue; }
+
+    const jaExiste = await db.registrosSeries.where('exercicio_id').equals(ex.id)
+      .and(r => r.data === data && r.numero_serie === numeroSerie).count();
+    if (jaExiste > 0) { duplicados++; continue; }
+
+    await db.registrosSeries.add({
+      exercicio_id: ex.id,
+      data,
+      semana_treino: null,
+      numero_serie: numeroSerie,
+      carga_kg: cargaTexto ? parseFloat(cargaTexto) : null,
+      reps: repsTexto ? parseFloat(repsTexto) : null
+    });
+    importados++;
+  }
+
+  mostrarToastConfig(container, `${importados} importadas, ${duplicados} já existiam, ${naoEncontrados} exercícios não encontrados.`);
+}
+
+async function importarPesoCSV(container, arquivo) {
+  const texto = await arquivo.text();
+  const linhas = parseCSV(texto);
+  if (linhas.length < 2) {
+    mostrarToastConfig(container, 'Arquivo vazio.');
+    return;
+  }
+  const cabecalho = linhas[0].map(h => h.trim().toLowerCase());
+  const idxData = cabecalho.indexOf('data');
+  const idxPeso = cabecalho.indexOf('peso_kg');
+  if (idxData === -1 || idxPeso === -1) {
+    mostrarToastConfig(container, 'Colunas esperadas: data,peso_kg');
+    return;
+  }
+
+  let novos = 0, atualizados = 0;
+  for (const linha of linhas.slice(1)) {
+    const data = linha[idxData]?.trim();
+    if (!data || data === 'AAAA-MM-DD') continue;
+    const peso = parseFloat(linha[idxPeso]);
+    if (!Number.isFinite(peso)) continue;
+
+    const existente = await db.registrosPeso.where('data').equals(data).first();
+    if (existente) {
+      await db.registrosPeso.update(existente.id, { peso_kg: peso });
+      atualizados++;
+    } else {
+      await db.registrosPeso.add({ data, peso_kg: peso });
+      novos++;
+    }
+  }
+
+  mostrarToastConfig(container, `${novos} novos, ${atualizados} atualizados.`);
 }

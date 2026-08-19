@@ -1,4 +1,5 @@
 const TREINO_LETTERS = ['A', 'B', 'C', 'D', 'E'];
+const TIPOS_CARDIO = ['Esteira', 'Bike', 'Elíptico', 'Corrida (rua)', 'Outro'];
 
 async function renderHoje(container) {
   const sugerido = await proximoTreinoSugerido();
@@ -12,6 +13,20 @@ async function renderHoje(container) {
     <div id="exercicios-lista"></div>
     <button class="salvar-treino-btn" id="salvar-treino-btn">Salvar treino</button>
     <div class="toast" id="toast">Treino salvo!</div>
+    <div class="card cardio-card">
+      <h2>Cardio de hoje</h2>
+      <div class="edit-row">
+        <select id="cardio-tipo">
+          ${TIPOS_CARDIO.map(t => `<option value="${t}">${t}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-row">
+        <input type="number" id="cardio-duracao" inputmode="numeric" step="1" min="0" placeholder="minutos">
+        <input type="number" id="cardio-distancia" inputmode="decimal" step="0.1" min="0" placeholder="km (opcional)">
+        <button class="btn-primary" id="cardio-salvar" type="button">Salvar cardio</button>
+      </div>
+      <div id="cardio-lista-hoje"></div>
+    </div>
   `;
 
   const tabsEl = container.querySelector('#treino-tabs');
@@ -31,6 +46,56 @@ async function renderHoje(container) {
   await renderExerciciosDoTreino(container.querySelector('#exercicios-lista'), treinoAtivo);
 
   container.querySelector('#salvar-treino-btn').addEventListener('click', () => salvarTreino(container));
+
+  container.querySelector('#cardio-salvar').addEventListener('click', () => salvarCardio(container));
+  await renderCardioDeHoje(container);
+}
+
+async function renderCardioDeHoje(container) {
+  const data = hoje();
+  const registros = await db.registrosCardio.where('data').equals(data).toArray();
+  const el = container.querySelector('#cardio-lista-hoje');
+
+  if (registros.length === 0) {
+    el.innerHTML = '';
+    return;
+  }
+
+  el.innerHTML = registros.map(r => `
+    <div class="stat-row" data-id="${r.id}">
+      <span class="stat-label">${escapeHtml(r.tipo)} — ${r.duracao_min ?? '-'} min${r.distancia_km ? ` · ${r.distancia_km} km` : ''}</span>
+      <button type="button" class="serie-remove cardio-remove" title="remover">×</button>
+    </div>
+  `).join('');
+
+  el.querySelectorAll('.cardio-remove').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = parseInt(btn.closest('[data-id]').dataset.id, 10);
+      await db.registrosCardio.delete(id);
+      await renderCardioDeHoje(container);
+    });
+  });
+}
+
+async function salvarCardio(container) {
+  const tipo = container.querySelector('#cardio-tipo').value;
+  const duracaoInput = container.querySelector('#cardio-duracao');
+  const distanciaInput = container.querySelector('#cardio-distancia');
+  const duracao = duracaoInput.value === '' ? null : parseFloat(duracaoInput.value);
+  const distancia = distanciaInput.value === '' ? null : parseFloat(distanciaInput.value);
+
+  if (duracao == null && distancia == null) return;
+
+  await db.registrosCardio.add({
+    data: hoje(),
+    tipo,
+    duracao_min: duracao,
+    distancia_km: distancia
+  });
+
+  duracaoInput.value = '';
+  distanciaInput.value = '';
+  await renderCardioDeHoje(container);
 }
 
 async function renderExerciciosDoTreino(el, treino) {

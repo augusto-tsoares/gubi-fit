@@ -1,8 +1,42 @@
 let historicoChartInstance = null;
+let cardioChartInstance = null;
 
 async function renderHistorico(container) {
+  if (!state.historicoModo) state.historicoModo = 'musculacao';
+
+  container.innerHTML = `
+    <div class="treino-tabs-wrap">
+      <div class="treino-tabs" id="historico-subtabs">
+        <button class="treino-tab subtab ${state.historicoModo === 'musculacao' ? 'active' : ''}" data-modo="musculacao">Musculação</button>
+        <button class="treino-tab subtab ${state.historicoModo === 'cardio' ? 'active' : ''}" data-modo="cardio">Cardio</button>
+      </div>
+    </div>
+    <div id="historico-conteudo"></div>
+  `;
+
+  container.querySelectorAll('.subtab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.historicoModo = btn.dataset.modo;
+      renderHistorico(container);
+    });
+  });
+
+  const conteudo = container.querySelector('#historico-conteudo');
+  if (state.historicoModo === 'cardio') {
+    await renderHistoricoCardio(conteudo);
+  } else {
+    await renderHistoricoMusculacao(conteudo);
+  }
+}
+
+async function renderHistoricoMusculacao(container) {
   const exercicios = await db.exercicios.orderBy('treino').toArray();
   if (!state.historicoJanelaMeses) state.historicoJanelaMeses = 12;
+
+  if (exercicios.length === 0) {
+    container.innerHTML = `<div class="empty-state">Nenhum exercício cadastrado.</div>`;
+    return;
+  }
 
   container.innerHTML = `
     <select class="exercicio-select" id="exercicio-select">
@@ -103,6 +137,99 @@ async function atualizarHistorico(container, exercicioId) {
     <h2>Últimas sessões</h2>
     <table class="history-table">
       <thead><tr><th>Data</th><th>Séries</th></tr></thead>
+      <tbody>${linhas}</tbody>
+    </table>
+  `;
+}
+
+async function renderHistoricoCardio(container) {
+  if (!state.cardioJanelaMeses) state.cardioJanelaMeses = 12;
+
+  container.innerHTML = `
+    <div class="card">
+      <div class="card-header-row">
+        <h2>Cardio ao longo do tempo</h2>
+        <select class="janela-select" id="cardio-janela">
+          <option value="1">1 mês</option>
+          <option value="3">3 meses</option>
+          <option value="6">6 meses</option>
+          <option value="12">1 ano</option>
+        </select>
+      </div>
+      <canvas id="cardio-chart" height="220"></canvas>
+    </div>
+    <div class="card" id="cardio-tabela"></div>
+  `;
+
+  const janelaSelect = container.querySelector('#cardio-janela');
+  janelaSelect.value = String(state.cardioJanelaMeses);
+  janelaSelect.addEventListener('change', () => {
+    state.cardioJanelaMeses = parseInt(janelaSelect.value, 10);
+    atualizarHistoricoCardio(container);
+  });
+
+  await atualizarHistoricoCardio(container);
+}
+
+async function atualizarHistoricoCardio(container) {
+  const registros = await db.registrosCardio.orderBy('data').toArray();
+  const grupos = agruparPorData(registros);
+  const datasComRegistro = Object.keys(grupos).sort();
+
+  const registrosDuracaoTotal = datasComRegistro.map(d => {
+    const duracoes = grupos[d].map(r => r.duracao_min).filter(v => Number.isFinite(v));
+    return { data: d, valor: duracoes.length ? duracoes.reduce((a, b) => a + b, 0) : null };
+  });
+
+  const janela = calcularJanela(state.cardioJanelaMeses);
+  const ticks = gerarTimelineSemanal(janela.inicio, janela.fim);
+  const valores = encaixarNaTimeline(registrosDuracaoTotal, ticks);
+  const labels = ticks.map(formatarDataBr);
+
+  const ctx = container.querySelector('#cardio-chart').getContext('2d');
+  if (cardioChartInstance) cardioChartInstance.destroy();
+
+  const corTexto = getComputedStyle(document.body).getPropertyValue('--text').trim() || '#222';
+  const corGrid = getComputedStyle(document.body).getPropertyValue('--border').trim() || '#ddd';
+
+  cardioChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Duração total no dia (min)',
+        data: valores,
+        borderColor: '#B6D7A8',
+        backgroundColor: 'rgba(182,215,168,0.25)',
+        spanGaps: false,
+        tension: 0.25,
+        pointRadius: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: corTexto } } },
+      scales: {
+        x: { ticks: { color: corTexto, maxRotation: 60, minRotation: 60, autoSkip: true, maxTicksLimit: 12 }, grid: { color: corGrid } },
+        y: { ticks: { color: corTexto }, grid: { color: corGrid } }
+      }
+    }
+  });
+
+  const tabelaEl = container.querySelector('#cardio-tabela');
+  if (datasComRegistro.length === 0) {
+    tabelaEl.innerHTML = `<div class="empty-state">Sem registros de cardio ainda.</div>`;
+    return;
+  }
+  const linhas = datasComRegistro.slice().reverse().slice(0, 15).map(d => {
+    const resumo = grupos[d].map(r => `${r.tipo} ${r.duracao_min ?? '-'}min${r.distancia_km ? ` (${r.distancia_km}km)` : ''}`).join(', ');
+    return `<tr><td>${formatarDataBr(d)}</td><td>${resumo}</td></tr>`;
+  }).join('');
+
+  tabelaEl.innerHTML = `
+    <h2>Últimas sessões</h2>
+    <table class="history-table">
+      <thead><tr><th>Data</th><th>Cardio</th></tr></thead>
       <tbody>${linhas}</tbody>
     </table>
   `;
