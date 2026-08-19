@@ -179,7 +179,13 @@ main {
   scroll-snap-type: x proximity;
   scroll-padding-left: 16px;
   scroll-padding-right: 16px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
+}
+
+.treino-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .treino-tab {
