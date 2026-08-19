@@ -415,6 +415,7 @@ main {
 
 .form-row .btn-primary {
   flex: 1 1 100%;
+  margin-top: 6px;
 }
 
 .btn-primary {
