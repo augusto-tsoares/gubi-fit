@@ -103,9 +103,23 @@ function calcularJanela(meses) {
 // Gera uma data por semana entre inicioISO e fimISO (inclusive), para servir
 // de eixo X continuo — assim uma semana sem registro aparece como um buraco
 // real no grafico em vez de simplesmente sumir.
+// Mesma ancora usada em semanaAtual() — garante que a grade semanal do
+// grafico e sempre a mesma independente da janela escolhida (1/3/6/12
+// meses). Sem isso, cada janela recalculava os "tiques" a partir de hoje
+// pra tras, e como os meses nao sao multiplos exatos de 7 dias, o
+// deslocamento mudava a cada janela: a mesma sessao registrada podia cair
+// num tique diferente (ou se fundir com outra) dependendo da janela aberta.
+const ANCORA_SEMANAL = '2026-01-12';
+
 function gerarTimelineSemanal(inicioISO, fimISO) {
+  const ancora = new Date(ANCORA_SEMANAL + 'T00:00:00');
+  const alvo = new Date(inicioISO + 'T00:00:00');
+  const diasDesdeAncora = Math.floor((alvo - ancora) / (1000 * 60 * 60 * 24));
+  const semanasCompletas = Math.floor(diasDesdeAncora / 7);
+  const d = new Date(ancora);
+  d.setDate(d.getDate() + semanasCompletas * 7);
+
   const ticks = [];
-  const d = new Date(inicioISO + 'T00:00:00');
   const fim = new Date(fimISO + 'T00:00:00');
   while (d <= fim) {
     ticks.push(d.toISOString().slice(0, 10));
