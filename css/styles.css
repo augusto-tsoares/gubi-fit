@@ -16,6 +16,15 @@
   --fase-transicao: #FCE5CD;
   --fase-cutting: #FFFFFF;
 
+  --fase-marker-bulking: #D5899E;
+  --fase-marker-cutting: #7FAEDD;
+  --fase-marker-transicao: #E8A868;
+
+  --warning-bg: #FBE9D0;
+  --warning-fg: #8A5A20;
+  --info-bg: #E2ECF5;
+  --info-fg: #2A5580;
+
   --bg: #FFFFFF;
   --surface: #FFFFFF;
   --text: #222222;
@@ -39,6 +48,10 @@
   --row-odd: #232323;
   --row-fg: #DDDDDD;
   --fase-cutting: #2A2A2A;
+  --warning-bg: #4A3A1E;
+  --warning-fg: #F0C98A;
+  --info-bg: #1E3348;
+  --info-fg: #A9CBE8;
 }
 
 * { box-sizing: border-box; }
@@ -597,3 +610,57 @@ canvas { max-width: 100%; }
   font-size: 13px;
   cursor: pointer;
 }
+
+.banner {
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.banner.warning { background: var(--warning-bg); color: var(--warning-fg); }
+.banner.info { background: var(--info-bg); color: var(--info-fg); }
+
+.meta-peso-atual {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meta-peso-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.meta-peso-form input, .meta-peso-form select {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--row-even);
+  color: var(--row-fg);
+  font-size: 15px;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12.5px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  align-self: flex-start;
+}
+
+.fase-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.fase-dot.bulking { background: var(--fase-marker-bulking); }
+.fase-dot.cutting { background: var(--fase-marker-cutting); }
+.fase-dot.transicao { background: var(--fase-marker-transicao); }

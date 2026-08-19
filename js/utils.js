@@ -126,6 +126,34 @@ function encaixarNaTimeline(registros, ticks) {
   });
 }
 
+// Ritmo semanal implicito por uma meta {peso_alvo, peso_inicial, data_inicio, data_alvo}
+function calcularRitmoSemanal(meta) {
+  const semanas = (new Date(meta.data_alvo) - new Date(meta.data_inicio)) / (1000 * 60 * 60 * 24 * 7);
+  if (semanas <= 0 || !meta.peso_inicial) return { kgPorSemana: 0, percentPorSemana: 0 };
+  const kgPorSemana = (meta.peso_alvo - meta.peso_inicial) / semanas;
+  const percentPorSemana = (kgPorSemana / meta.peso_inicial) * 100;
+  return { kgPorSemana: +kgPorSemana.toFixed(3), percentPorSemana: +percentPorSemana.toFixed(2) };
+}
+
+// Peso "ideal" numa data, interpolando linearmente entre peso_inicial (data_inicio)
+// e peso_alvo (data_alvo). Fora desse intervalo, retorna null (sem trajetoria ali).
+function pesoTrajetoriaMeta(meta, dataISO) {
+  if (dataISO < meta.data_inicio || dataISO > meta.data_alvo) return null;
+  const inicio = new Date(meta.data_inicio + 'T00:00:00');
+  const alvo = new Date(meta.data_alvo + 'T00:00:00');
+  const atual = new Date(dataISO + 'T00:00:00');
+  const totalMs = alvo - inicio;
+  if (totalMs <= 0) return meta.peso_alvo;
+  const fracao = (atual - inicio) / totalMs;
+  return +(meta.peso_inicial + (meta.peso_alvo - meta.peso_inicial) * fracao).toFixed(2);
+}
+
+function diasDesde(dataISO) {
+  const d1 = new Date(dataISO + 'T00:00:00');
+  const d2 = new Date(hoje() + 'T00:00:00');
+  return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+}
+
 function escapeHtml(valor) {
   return String(valor ?? '').replace(/[&<>"']/g, c => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'

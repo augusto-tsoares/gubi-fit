@@ -63,6 +63,30 @@ async function setFaseAtual(tipoFase) {
   await db.meta.put({ chave: 'fase_atual', valor: tipoFase });
 }
 
+async function getMetaPeso() {
+  const registro = await db.meta.get('meta_peso');
+  return registro ? registro.valor : null;
+}
+
+async function setMetaPeso(pesoAlvo, prazoMeses, pesoInicial) {
+  const dataInicio = hoje();
+  const dataAlvoObj = new Date();
+  dataAlvoObj.setMonth(dataAlvoObj.getMonth() + prazoMeses);
+  const meta = {
+    peso_alvo: pesoAlvo,
+    prazo_meses: prazoMeses,
+    peso_inicial: pesoInicial,
+    data_inicio: dataInicio,
+    data_alvo: dataAlvoObj.toISOString().slice(0, 10)
+  };
+  await db.meta.put({ chave: 'meta_peso', valor: meta });
+  return meta;
+}
+
+async function limparMetaPeso() {
+  await db.meta.delete('meta_peso');
+}
+
 async function proximoTreinoSugerido() {
   const ultimos = await db.registrosSeries.orderBy('data').reverse().limit(1).toArray();
   if (ultimos.length === 0) return 'A';

@@ -1,6 +1,45 @@
 const TREINO_LETTERS = ['A', 'B', 'C', 'D', 'E'];
 const TIPOS_CARDIO = ['Esteira', 'Bike', 'Elíptico', 'Corrida (rua)', 'Escada', 'Pular corda', 'Outro'];
 
+// Rascunho local (localStorage) do treino em andamento, pra nao perder o que
+// foi digitado se o app for pra segundo plano/fechado antes de "Salvar treino".
+function chaveRascunho(data, treino) {
+  return `gubi_fit_rascunho_${data}_${treino}`;
+}
+
+function lerRascunho(data, treino) {
+  try {
+    const raw = localStorage.getItem(chaveRascunho(data, treino));
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function salvarRascunho(container, data, treino) {
+  const rascunho = {};
+  container.querySelectorAll('.exercicio-card').forEach(card => {
+    const id = card.dataset.exercicioId;
+    const linhas = [...card.querySelectorAll('.serie-row')].map(linha => ({
+      carga: linha.querySelector('.input-carga').value,
+      reps: linha.querySelector('.input-reps').value
+    }));
+    if (linhas.some(l => l.carga !== '' || l.reps !== '')) {
+      rascunho[id] = linhas;
+    }
+  });
+
+  if (Object.keys(rascunho).length === 0) {
+    localStorage.removeItem(chaveRascunho(data, treino));
+  } else {
+    localStorage.setItem(chaveRascunho(data, treino), JSON.stringify(rascunho));
+  }
+}
+
+function limparRascunho(data, treino) {
+  localStorage.removeItem(chaveRascunho(data, treino));
+}
+
 async function renderHoje(container) {
   const sugerido = await proximoTreinoSugerido();
   let treinoAtivo = state.treinoSelecionado || sugerido;
@@ -44,6 +83,10 @@ async function renderHoje(container) {
   });
 
   await renderExerciciosDoTreino(container.querySelector('#exercicios-lista'), treinoAtivo);
+
+  container.querySelector('#exercicios-lista').addEventListener('input', () => {
+    salvarRascunho(container, hoje(), state.treinoSelecionado);
+  });
 
   container.querySelector('#salvar-treino-btn').addEventListener('click', () => salvarTreino(container));
 
@@ -105,7 +148,8 @@ async function renderExerciciosDoTreino(el, treino) {
     return;
   }
 
-  const partes = await Promise.all(exercicios.map(ex => renderExercicioCard(ex)));
+  const rascunho = lerRascunho(hoje(), treino);
+  const partes = await Promise.all(exercicios.map(ex => renderExercicioCard(ex, rascunho[ex.id])));
   el.innerHTML = partes.join('');
 
   el.querySelectorAll('.add-serie-btn').forEach(btn => {
@@ -116,7 +160,7 @@ async function renderExerciciosDoTreino(el, treino) {
   });
 }
 
-async function renderExercicioCard(ex) {
+async function renderExercicioCard(ex, linhasRascunho) {
   const todosRegistros = await db.registrosSeries.where('exercicio_id').equals(ex.id).sortBy('data');
   const grupos = agruparPorData(todosRegistros);
   const datas = Object.keys(grupos).sort();
@@ -128,11 +172,17 @@ async function renderExercicioCard(ex) {
   const sugestao = sugerirCarga(ex, seriesUltima, cargaMaximaHistorica);
   const treinoCorVar = `var(--treino-${ex.treino.toLowerCase()}-bg)`;
 
-  const numSeriesIniciais = Math.max(ex.series_alvo || 3, 1);
   const linhasIniciais = [];
-  for (let i = 1; i <= numSeriesIniciais; i++) {
-    const cargaSugerida = Number.isFinite(sugestao.carga_sugerida) ? sugestao.carga_sugerida : '';
-    linhasIniciais.push(linhaSerieHtml(i, cargaSugerida, ''));
+  if (linhasRascunho && linhasRascunho.length > 0) {
+    linhasRascunho.forEach((linha, i) => {
+      linhasIniciais.push(linhaSerieHtml(i + 1, linha.carga, linha.reps));
+    });
+  } else {
+    const numSeriesIniciais = Math.max(ex.series_alvo || 3, 1);
+    for (let i = 1; i <= numSeriesIniciais; i++) {
+      const cargaSugerida = Number.isFinite(sugestao.carga_sugerida) ? sugestao.carga_sugerida : '';
+      linhasIniciais.push(linhaSerieHtml(i, cargaSugerida, ''));
+    }
   }
 
   return `
@@ -207,6 +257,7 @@ async function salvarTreino(container) {
   setTimeout(() => toast.classList.remove('show'), 2000);
 
   if (totalSalvo > 0) {
+    limparRascunho(data, state.treinoSelecionado);
     await renderExerciciosDoTreino(container.querySelector('#exercicios-lista'), state.treinoSelecionado);
   }
 }
