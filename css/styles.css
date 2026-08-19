@@ -152,6 +152,8 @@ main {
   overflow-x: auto;
   padding: 0 16px 4px 16px;
   scroll-snap-type: x proximity;
+  scroll-padding-left: 16px;
+  scroll-padding-right: 16px;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -272,8 +274,7 @@ main {
 }
 
 .salvar-treino-btn {
-  position: sticky;
-  bottom: calc(64px + env(safe-area-inset-bottom) + 12px);
+  display: block;
   width: 100%;
   background: var(--accent);
   color: #fff;
@@ -283,7 +284,7 @@ main {
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 4px;
+  margin-top: 20px;
 }
 
 .toast {
@@ -354,18 +355,24 @@ main {
 
 .form-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   align-items: center;
 }
 
 .form-row input[type="number"], .form-row input[type="date"] {
-  flex: 1;
+  flex: 1 1 120px;
+  min-width: 0;
   padding: 12px;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--row-even);
   color: var(--row-fg);
   font-size: 15px;
+}
+
+.form-row .btn-primary {
+  flex: 1 1 100%;
 }
 
 .btn-primary {
