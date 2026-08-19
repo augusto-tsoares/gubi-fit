@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Gubi Fit</title>
+<meta name="theme-color" content="#666666">
+<meta name="description" content="Registro rápido de treino, carga e progressão">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gubi Fit">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header class="app-header">
+  <h1>Gubi Fit</h1>
+  <div class="header-actions">
+    <span class="fase-badge" id="fase-badge"></span>
+    <button class="icon-btn" id="toggle-tema" title="Alternar tema">🌗</button>
+  </div>
+</header>
+
+<main id="main-content"></main>
+
+<nav class="bottom-nav" id="bottom-nav"></nav>
+
+<script src="vendor/dexie.min.js"></script>
+<script src="vendor/chart.umd.min.js"></script>
+<script src="js/db.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/screens/hoje.js"></script>
+<script src="js/screens/peso.js"></script>
+<script src="js/screens/historico.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

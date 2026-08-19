@@ -1,0 +1,2881 @@
+{
+  "periodo_historico": "2026-01-12 a 2026-06-01 (dados consistentes ate meados de marco; a partir da semana 11 houve uma pausa por doenca)",
+  "exercicios": [
+    {
+      "treino": "A",
+      "exercicio": "Supino Inclinado com Halteres (ou Barra)",
+      "series_alvo": 3.0,
+      "reps_alvo": "6 - 9 (RIR 1)",
+      "descanso": "3-4 min",
+      "nota": "Foco em tensão mecânica na clavicular do peito. Carga alta.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 20.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": null,
+          "carga_kg": 22.5
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 9.0,
+          "carga_kg": 22.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": "8;7;6",
+          "carga_kg": 24.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": "10;7;7",
+          "carga_kg": 24.0
+        },
+        {
+          "semana": 6,
+          "data": "2026-02-16",
+          "reps": "CARNAVAL",
+          "carga_kg": null
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": "9;6",
+          "carga_kg": 24.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": "9;9;7",
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": "10;9",
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": "8;8;6",
+          "carga_kg": 27.5
+        },
+        {
+          "semana": 11,
+          "data": "2026-03-23",
+          "reps": 10.0,
+          "carga_kg": 24.0
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 10.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": 6.0,
+          "carga_kg": 20.0
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": 7.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 10.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": "10;7",
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": "10;8",
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": "10;10;7",
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 20,
+          "data": "2026-05-25",
+          "reps": 7.0,
+          "carga_kg": 27.5
+        }
+      ]
+    },
+    {
+      "treino": "A",
+      "exercicio": "Crossover Polia Alta (Novo)",
+      "series_alvo": 3.0,
+      "reps_alvo": "10 - 12 (RIR 0)",
+      "descanso": "2 min",
+      "nota": "Foco: Inferior. Polia no topo. Puxe as mãos em direção ao quadril (\"bolso da calça\"). Segure 1s apertando embaixo.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 16.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 12.0,
+          "carga_kg": null
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 12.0,
+          "carga_kg": 11.25
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 10.0,
+          "carga_kg": 13.75
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 12.0,
+          "carga_kg": 13.75
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 10.0,
+          "carga_kg": 16.25
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": "10;9",
+          "carga_kg": 16.25
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": "11;10",
+          "carga_kg": 16.25
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": 12.0,
+          "carga_kg": 16.25
+        },
+        {
+          "semana": 11,
+          "data": "2026-03-23",
+          "reps": 10.0,
+          "carga_kg": 14.75
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 10.0,
+          "carga_kg": 16.25
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": 10.0,
+          "carga_kg": 16.25
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": 12.0,
+          "carga_kg": 16.25
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": "12;9",
+          "carga_kg": 16.25
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": "12;10",
+          "carga_kg": 16.25
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": "12;11",
+          "carga_kg": 16.25
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 12.0,
+          "carga_kg": 16.25
+        },
+        {
+          "semana": 20,
+          "data": "2026-05-25",
+          "reps": 12.0,
+          "carga_kg": 16.25
+        }
+      ]
+    },
+    {
+      "treino": "A",
+      "exercicio": "Desenvolvimento Militar (Sentado ou em pé)",
+      "series_alvo": 2.0,
+      "reps_alvo": "6 - 10 (RIR 0-1)",
+      "descanso": "3 min",
+      "nota": "Carga alta para deltoides anteriores e médios.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 20.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": null,
+          "carga_kg": 22.5
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 10.0,
+          "carga_kg": 22.5
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 10.0,
+          "carga_kg": 27.5
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 10.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": "9;8",
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 10.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": 8.0,
+          "carga_kg": 32.5
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": 10.0,
+          "carga_kg": 32.5
+        },
+        {
+          "semana": 11,
+          "data": "2026-03-23",
+          "reps": 10.0,
+          "carga_kg": 34.5
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 8.0,
+          "carga_kg": 32.5
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": 10.0,
+          "carga_kg": 32.5
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": 8.0,
+          "carga_kg": 35.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 8.0,
+          "carga_kg": 35.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": "8;6",
+          "carga_kg": 35.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": "7;",
+          "carga_kg": 35.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 9.0,
+          "carga_kg": 35.0
+        },
+        {
+          "semana": 20,
+          "data": "2026-05-25",
+          "reps": 10.0,
+          "carga_kg": 35.0
+        }
+      ]
+    },
+    {
+      "treino": "A",
+      "exercicio": "Elevação Lateral (Halteres ou Polia)",
+      "series_alvo": 3.0,
+      "reps_alvo": "12 - 15 (RIR 0)",
+      "descanso": "2 min",
+      "nota": "Ombros laterais respondem bem a um pouco mais de repetições e falha total, pois a carga é baixa e segura.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 6.25
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 12.0,
+          "carga_kg": null
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 10.0,
+          "carga_kg": 6.25
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 10.0,
+          "carga_kg": 6.25
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 12.0,
+          "carga_kg": 3.75
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 10.0,
+          "carga_kg": 6.25
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 12.0,
+          "carga_kg": 6.25
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": 8.0,
+          "carga_kg": 6.25
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": 10.0,
+          "carga_kg": 6.25
+        },
+        {
+          "semana": 11,
+          "data": "2026-03-23",
+          "reps": 12.0,
+          "carga_kg": 9.0
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 10.0,
+          "carga_kg": 6.25
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": 10.0,
+          "carga_kg": 12.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 10.0,
+          "carga_kg": 12.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 10.0,
+          "carga_kg": 12.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": 11.0,
+          "carga_kg": 12.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 12.0,
+          "carga_kg": 12.0
+        }
+      ]
+    },
+    {
+      "treino": "A",
+      "exercicio": "Tríceps Testa (ou Francês)",
+      "series_alvo": 2.0,
+      "reps_alvo": "8 - 12 (RIR 0-1)",
+      "descanso": "2 min",
+      "nota": "Foco no alongamento do tríceps com carga moderada-alta.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 16.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 12.0,
+          "carga_kg": null
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 12.0,
+          "carga_kg": 20.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": "12;10",
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 12.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 11.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 12.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": 9.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": 10.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 11,
+          "data": "2026-03-23",
+          "reps": null,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 10.0,
+          "carga_kg": 16.25
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": 12.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 10.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 10.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 10.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 20,
+          "data": "2026-05-25",
+          "reps": 11.0,
+          "carga_kg": 30.0
+        }
+      ]
+    },
+    {
+      "treino": "B",
+      "exercicio": "Remada Curvada (Barra ou Cavalinho)",
+      "series_alvo": 3.0,
+      "reps_alvo": "6 - 9 (RIR 1-2)",
+      "descanso": "3-4 min",
+      "nota": "O melhor construtor de espessura. Mantenha a forma rígida.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 8.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 10.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 10.0,
+          "carga_kg": 35.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 8.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 9.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 8.0,
+          "carga_kg": 45.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": "9;8",
+          "carga_kg": 45.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": 9.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": "9;7",
+          "carga_kg": "45;47,5"
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": "9;7",
+          "carga_kg": 45.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": "9;7",
+          "carga_kg": 47.5
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": "8;7",
+          "carga_kg": 47.5
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 9.0,
+          "carga_kg": 47.5
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 7.0,
+          "carga_kg": 45.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": 8.0,
+          "carga_kg": 45.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 9.0,
+          "carga_kg": 45.0
+        },
+        {
+          "semana": 20,
+          "data": "2026-05-25",
+          "reps": 9.0,
+          "carga_kg": 47.5
+        }
+      ]
+    },
+    {
+      "treino": "B",
+      "exercicio": "Puxada Alta (Pegada Neutra ou Pronada)",
+      "series_alvo": 2.0,
+      "reps_alvo": "8 - 10 (RIR 0-1)",
+      "descanso": "3 min",
+      "nota": "Foco na conexão mente-músculo e carga alta.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 52.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 8.0,
+          "carga_kg": 55.0
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 9.0,
+          "carga_kg": 55.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": "10;8",
+          "carga_kg": 55.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 8.0,
+          "carga_kg": 10.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": "10;8",
+          "carga_kg": 54.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 10.0,
+          "carga_kg": 54.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": 9.0,
+          "carga_kg": 61.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": "10;7",
+          "carga_kg": "52;61,3"
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 8.0,
+          "carga_kg": 61.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": 7.0,
+          "carga_kg": 61.0
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": 8.0,
+          "carga_kg": 61.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 9.0,
+          "carga_kg": 61.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 10.0,
+          "carga_kg": 61.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": 7.0,
+          "carga_kg": 68.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 8.0,
+          "carga_kg": 68.0
+        },
+        {
+          "semana": 20,
+          "data": "2026-05-25",
+          "reps": 8.0,
+          "carga_kg": 68.0
+        }
+      ]
+    },
+    {
+      "treino": "B",
+      "exercicio": "Voador Invertido (Posterior de Ombro)",
+      "series_alvo": 3.0,
+      "reps_alvo": "12 - 15 (RIR 0)",
+      "descanso": "2 min",
+      "nota": "Volume necessário para essa musculatura pequena.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 39.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 12.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 12.0,
+          "carga_kg": 45.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 12.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 14.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": "13;9",
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": "12;10",
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": "12;10",
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": "15;12",
+          "carga_kg": 39.0
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": "12;10;9",
+          "carga_kg": 41.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": 12.0,
+          "carga_kg": 41.0
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": 10.0,
+          "carga_kg": 41.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 15.0,
+          "carga_kg": 35.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 12.0,
+          "carga_kg": 35.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": 15.0,
+          "carga_kg": 35.0
+        }
+      ]
+    },
+    {
+      "treino": "B",
+      "exercicio": "Rosca Direta (Barra W ou Reta)",
+      "series_alvo": 2.0,
+      "reps_alvo": "6 - 10 (RIR 0)",
+      "descanso": "2 min",
+      "nota": "Bíceps pesado. Use o corpo minimamente apenas nas últimas reps.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 8.0,
+          "carga_kg": 22.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 6.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 8.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 10.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 7.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 6.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": "12;10",
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": 6.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": "5;5",
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 12.0,
+          "carga_kg": 20.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": 10.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": "7;5",
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": "10;8;6",
+          "carga_kg": 24.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": "12;10",
+          "carga_kg": 24.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": "10;7;",
+          "carga_kg": 24.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 8.0,
+          "carga_kg": 24.0
+        },
+        {
+          "semana": 20,
+          "data": "2026-05-25",
+          "reps": "8;6;6",
+          "carga_kg": 24.0
+        }
+      ]
+    },
+    {
+      "treino": "B",
+      "exercicio": "Abdominal na Polia (Crunch com corda)",
+      "series_alvo": 3.0,
+      "reps_alvo": "10 - 15 (RIR 0)",
+      "descanso": "90s",
+      "nota": "Abdômen precisa de carga para hipertrofiar, não de 50 repetições.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 55.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 10.0,
+          "carga_kg": 57.5
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 12.0,
+          "carga_kg": 57.5
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 14.0,
+          "carga_kg": 57.5
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 13.0,
+          "carga_kg": 60.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 11.0,
+          "carga_kg": 60.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 15.0,
+          "carga_kg": 60.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": "10;12",
+          "carga_kg": 60.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": 15.0,
+          "carga_kg": "59;64"
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 10.0,
+          "carga_kg": 60.0
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": 10.0,
+          "carga_kg": 60.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 12.0,
+          "carga_kg": 55.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": 12.0,
+          "carga_kg": 55.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 12.0,
+          "carga_kg": 55.0
+        }
+      ]
+    },
+    {
+      "treino": "C",
+      "exercicio": "Elevação Pélvica (Hip Thrust)",
+      "series_alvo": 3.0,
+      "reps_alvo": "8 - 12 (RIR 0-1)",
+      "descanso": "3 min",
+      "nota": "O rei do glúteo. Carga máxima com pico de contração de 2s.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 15.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 12.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 12.0,
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": "12;10;10",
+          "carga_kg": 60.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": "10;8",
+          "carga_kg": 70.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 10.0,
+          "carga_kg": 70.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": "12;9;11",
+          "carga_kg": 70.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": "11;",
+          "carga_kg": 80.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": 10.0,
+          "carga_kg": 20.0
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 10.0,
+          "carga_kg": 80.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": 12.0,
+          "carga_kg": 80.0
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": "9;8",
+          "carga_kg": 80.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 12.0,
+          "carga_kg": 80.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 10.0,
+          "carga_kg": 90.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": 11.0,
+          "carga_kg": 90.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": "10;8",
+          "carga_kg": 100.0
+        }
+      ]
+    },
+    {
+      "treino": "C",
+      "exercicio": "RDL (Stiff) com Barra ou Halteres",
+      "series_alvo": 2.0,
+      "reps_alvo": "6 - 10 (RIR 2)",
+      "descanso": "3 min",
+      "nota": "Foco no alongamento do posterior e glúteo. Não precisa falhar aqui para crescer (risco lombar).",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 8.0,
+          "carga_kg": 22.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 10.0,
+          "carga_kg": 20.0
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 10.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 10.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 10.0,
+          "carga_kg": 35.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 10.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 8.0,
+          "carga_kg": 45.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": 9.0,
+          "carga_kg": 45.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": 9.0,
+          "carga_kg": 46.0
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 6.0,
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": 8.0,
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 8.0,
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 9.0,
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": 10.0,
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 7.0,
+          "carga_kg": 60.0
+        }
+      ]
+    },
+    {
+      "treino": "C",
+      "exercicio": "Leg Press 45º (Pés altos)",
+      "series_alvo": 2.0,
+      "reps_alvo": "10 - 12 (RIR 0-1)",
+      "descanso": "3 min",
+      "nota": "Amplitude máxima, foco em glúteo.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 60.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 12.0,
+          "carga_kg": 60.0
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 12.0,
+          "carga_kg": 80.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 12.0,
+          "carga_kg": 90.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 10.0,
+          "carga_kg": 120.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 12.0,
+          "carga_kg": 120.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": "11;10",
+          "carga_kg": 140.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": "10;8",
+          "carga_kg": 140.0
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": "10;8",
+          "carga_kg": 140.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 12.0,
+          "carga_kg": 125.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 12.0,
+          "carga_kg": 140.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": 10.0,
+          "carga_kg": 160.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 11.0,
+          "carga_kg": 160.0
+        }
+      ]
+    },
+    {
+      "treino": "C",
+      "exercicio": "Panturrilha em Pé (Máquina ou Smith)",
+      "series_alvo": 3.0,
+      "reps_alvo": "10 - 15 (RIR 0)",
+      "descanso": "2 min",
+      "nota": "Crucial: 3 segundos descendo, 1 segundo parado embaixo, explode pra subir. Carga alta.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 12.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 12.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 10.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 12.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 10.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 12.0,
+          "carga_kg": null
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": "12;10",
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": 15.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 10.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 15.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": 12.0,
+          "carga_kg": 40.0
+        }
+      ]
+    },
+    {
+      "treino": "D",
+      "exercicio": "Supino Reto (Halteres ou Máquina)",
+      "series_alvo": 3.0,
+      "reps_alvo": "8 - 10 (RIR 1)",
+      "descanso": "3 min",
+      "nota": "Complemento para peitoral total.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": "10;8;6",
+          "carga_kg": 35.0
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": "10;10;8",
+          "carga_kg": 35.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": "8;6;6",
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": "10;8",
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": "10;8",
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": "10;8",
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": "10;9;8",
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": "10;10;8",
+          "carga_kg": "40;45"
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 9.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": 8.0,
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": 9.0,
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 10.0,
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": "10;7",
+          "carga_kg": "50;55"
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": "10;8",
+          "carga_kg": 55.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": "10;9;7",
+          "carga_kg": 55.0
+        }
+      ]
+    },
+    {
+      "treino": "D",
+      "exercicio": "Remada Unilateral (Serrote)",
+      "series_alvo": 3.0,
+      "reps_alvo": "8 - 10 (RIR 0-1)",
+      "descanso": "2 min",
+      "nota": "Foco na contração unilateral das dorsais.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 20.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 11.0,
+          "carga_kg": 22.0
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 10.0,
+          "carga_kg": 24.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 10.0,
+          "carga_kg": 26.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 10.0,
+          "carga_kg": 28.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 10.0,
+          "carga_kg": 28.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": "10;8",
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": "10;8",
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": 10.0,
+          "carga_kg": 28.0
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 10.0,
+          "carga_kg": 28.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": "10;8",
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": "10;8;6",
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": "10;108",
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 10.0,
+          "carga_kg": 30.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": "10;8;8",
+          "carga_kg": 32.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": "10;8;7",
+          "carga_kg": 32.0
+        }
+      ]
+    },
+    {
+      "treino": "D",
+      "exercicio": "Elevação Lateral (Variação da anterior)",
+      "series_alvo": 3.0,
+      "reps_alvo": "12 - 15 (RIR 0)",
+      "descanso": "90s",
+      "nota": "Mais volume para o ombro \"cebola\".",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 10.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 11.0,
+          "carga_kg": 10.0
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 12.0,
+          "carga_kg": 10.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 14.0,
+          "carga_kg": 10.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": "15;15;10",
+          "carga_kg": 10.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 15.0,
+          "carga_kg": 10.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 15.0,
+          "carga_kg": 10.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": 15.0,
+          "carga_kg": 10.0
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": 12.0,
+          "carga_kg": 12.0
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 10.0,
+          "carga_kg": 12.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": "12:10;8",
+          "carga_kg": 12.0
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": 10.0,
+          "carga_kg": 12.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 10.0,
+          "carga_kg": 12.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 12.0,
+          "carga_kg": 12.0
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": 12.0,
+          "carga_kg": 12.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 10.0,
+          "carga_kg": 12.0
+        }
+      ]
+    },
+    {
+      "treino": "D",
+      "exercicio": "Super-série: Rosca Martelo + Tríceps Corda",
+      "series_alvo": 2.0,
+      "reps_alvo": "10 - 12 (cada) (RIR 0)",
+      "descanso": "2 min",
+      "nota": "Economia de tempo e pump final nos braços.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": "16,25;18,75"
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 11.0,
+          "carga_kg": "16,25;18,75"
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 10.0,
+          "carga_kg": "18,75; 21,25"
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 12.0,
+          "carga_kg": "18,75;23,75"
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 10.0,
+          "carga_kg": 26.25
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 9.0,
+          "carga_kg": "23,75;26,25"
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 9.0,
+          "carga_kg": 23.75
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": "10;12",
+          "carga_kg": 23.75
+        },
+        {
+          "semana": 10,
+          "data": "2026-03-16",
+          "reps": 10.0,
+          "carga_kg": "21,8;23,8"
+        },
+        {
+          "semana": 13,
+          "data": "2026-04-06",
+          "reps": 11.0,
+          "carga_kg": "21,25; 23,75"
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": "12;10",
+          "carga_kg": "21,25; 23,75"
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": "10;8",
+          "carga_kg": 21.25
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": "2026-09-12",
+          "carga_kg": 21.25
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 12.0,
+          "carga_kg": "21,25;23"
+        },
+        {
+          "semana": 18,
+          "data": "2026-05-11",
+          "reps": "11;10",
+          "carga_kg": "21,25;23,75"
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 11.0,
+          "carga_kg": 23.75
+        }
+      ]
+    },
+    {
+      "treino": "D",
+      "exercicio": "Elevação de Pernas Suspenso (Infra)",
+      "series_alvo": 3.0,
+      "reps_alvo": "10 - 15 (RIR 0)",
+      "descanso": "90s",
+      "nota": "Foco na porção inferior do abdômen.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 12.0,
+          "carga_kg": "-"
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 10.0,
+          "carga_kg": 6.0
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 11.0,
+          "carga_kg": 6.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 12.0,
+          "carga_kg": null
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 12.0,
+          "carga_kg": 6.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 12.0,
+          "carga_kg": 6.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": 10.0,
+          "carga_kg": 6.0
+        },
+        {
+          "semana": 19,
+          "data": "2026-05-18",
+          "reps": 10.0,
+          "carga_kg": "-"
+        }
+      ]
+    },
+    {
+      "treino": "E",
+      "exercicio": "Agachamento no Smith",
+      "series_alvo": 3.0,
+      "reps_alvo": "8 - 12 (RIR 0-1)",
+      "descanso": "3-4 min",
+      "nota": "Desça profundo com segurança até a falha. Carga Alta.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 12.0,
+          "carga_kg": null
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 12.0,
+          "carga_kg": 40.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 10.0,
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 12.0,
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 12.0,
+          "carga_kg": 50.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 12.0,
+          "carga_kg": 60.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": "9;10",
+          "carga_kg": 80.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": 10.0,
+          "carga_kg": 80.0
+        },
+        {
+          "semana": 16,
+          "data": "2026-04-27",
+          "reps": "Trilha",
+          "carga_kg": null
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 11.0,
+          "carga_kg": 80.0
+        }
+      ]
+    },
+    {
+      "treino": "E",
+      "exercicio": "Agachamento Búlgaro (Halteres)",
+      "series_alvo": 2.0,
+      "reps_alvo": "8-12 (RIR 0)",
+      "descanso": "3 min",
+      "nota": "Incline o tronco para focar no glúteo",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 8.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 10.0,
+          "carga_kg": null
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 10.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 12.0,
+          "carga_kg": 25.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 10.0,
+          "carga_kg": 6.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": "12;10",
+          "carga_kg": 6.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": "10;8",
+          "carga_kg": 7.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": "12;10",
+          "carga_kg": 8.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": "10;8",
+          "carga_kg": 7.0
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": null,
+          "carga_kg": 8.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": "10;8",
+          "carga_kg": 8.0
+        }
+      ]
+    },
+    {
+      "treino": "E",
+      "exercicio": "Leg Press Horizontal (Máquina)",
+      "series_alvo": 2.0,
+      "reps_alvo": "10 - 15 (RIR 0-1)",
+      "descanso": "3 min",
+      "nota": "Amplitude máxima sem tirar o quadril do banco.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 85.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 12.0,
+          "carga_kg": null
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 12.0,
+          "carga_kg": 85.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 15.0,
+          "carga_kg": 85.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 15.0,
+          "carga_kg": 95.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 10.0,
+          "carga_kg": 45.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 12.0,
+          "carga_kg": 60.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": 12.0,
+          "carga_kg": 60.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": 12.0,
+          "carga_kg": 60.0
+        }
+      ]
+    },
+    {
+      "treino": "E",
+      "exercicio": "Cadeira Abdutora",
+      "series_alvo": 2.0,
+      "reps_alvo": "15 - 20 (RIR 0)",
+      "descanso": "2 min",
+      "nota": "Incline o tronco para frente para isolar melhor",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 85.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 12.0,
+          "carga_kg": null
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 12.0,
+          "carga_kg": 85.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 14.0,
+          "carga_kg": 85.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 14.0,
+          "carga_kg": 85.0
+        },
+        {
+          "semana": 8,
+          "data": "2026-03-02",
+          "reps": 15.0,
+          "carga_kg": 85.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": 15.0,
+          "carga_kg": 85.0
+        },
+        {
+          "semana": 14,
+          "data": "2026-04-13",
+          "reps": 12.0,
+          "carga_kg": 85.0
+        },
+        {
+          "semana": 15,
+          "data": "2026-04-20",
+          "reps": 12.0,
+          "carga_kg": 95.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": "12;10",
+          "carga_kg": 100.0
+        }
+      ]
+    },
+    {
+      "treino": "E",
+      "exercicio": "Panturrilha Sentado (Máquina)",
+      "series_alvo": 3.0,
+      "reps_alvo": "15 - 25 (RIR 0)",
+      "descanso": "2 min",
+      "nota": "Foco no Sóleo. Cadência lenta: desça em 3s, segure 2s no alongamento máximo e suba.",
+      "historico": [
+        {
+          "semana": 1,
+          "data": "2026-01-12",
+          "reps": 10.0,
+          "carga_kg": 20.0
+        },
+        {
+          "semana": 2,
+          "data": "2026-01-19",
+          "reps": 12.0,
+          "carga_kg": null
+        },
+        {
+          "semana": 3,
+          "data": "2026-01-26",
+          "reps": 15.0,
+          "carga_kg": 85.0
+        },
+        {
+          "semana": 4,
+          "data": "2026-02-02",
+          "reps": 13.0,
+          "carga_kg": 95.0
+        },
+        {
+          "semana": 5,
+          "data": "2026-02-09",
+          "reps": 13.0,
+          "carga_kg": 95.0
+        },
+        {
+          "semana": 7,
+          "data": "2026-02-23",
+          "reps": 13.0,
+          "carga_kg": 95.0
+        },
+        {
+          "semana": 9,
+          "data": "2026-03-09",
+          "reps": 15.0,
+          "carga_kg": 95.0
+        },
+        {
+          "semana": 17,
+          "data": "2026-05-04",
+          "reps": 10.0,
+          "carga_kg": 80.0
+        }
+      ]
+    }
+  ],
+  "acompanhamento_semanal": [
+    {
+      "semana": 1.0,
+      "data": "2026-01-12",
+      "meta_peso_kg": null,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        "B",
+        "C",
+        "OFF",
+        "D",
+        "OFF",
+        "E",
+        "A"
+      ]
+    },
+    {
+      "semana": 2.0,
+      "data": "2026-01-19",
+      "meta_peso_kg": null,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        "OFF",
+        "B",
+        "OFF",
+        "C",
+        "D",
+        "OFF",
+        "OFF"
+      ]
+    },
+    {
+      "semana": 3.0,
+      "data": "2026-01-26",
+      "meta_peso_kg": 70.0,
+      "peso_kg": 70.0,
+      "dias_treino_seg_a_dom": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "OFF",
+        "E",
+        "OFF"
+      ]
+    },
+    {
+      "semana": 4.0,
+      "data": "2026-02-02",
+      "meta_peso_kg": 70.0,
+      "peso_kg": 69.5,
+      "dias_treino_seg_a_dom": [
+        "A",
+        "B",
+        "OFF",
+        "C",
+        "D",
+        "OFF",
+        "E"
+      ]
+    },
+    {
+      "semana": 5.0,
+      "data": "2026-02-09",
+      "meta_peso_kg": 70.0,
+      "peso_kg": 70.2,
+      "dias_treino_seg_a_dom": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "CARNAVAL ",
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 6.0,
+      "data": "2026-02-16",
+      "meta_peso_kg": 70.5,
+      "peso_kg": 69.3,
+      "dias_treino_seg_a_dom": [
+        "CARNAVAL",
+        null,
+        null,
+        null,
+        "OFF",
+        "E",
+        "OFF"
+      ]
+    },
+    {
+      "semana": 7.0,
+      "data": "2026-02-23",
+      "meta_peso_kg": 71.0,
+      "peso_kg": 68.8,
+      "dias_treino_seg_a_dom": [
+        "A",
+        "OFF",
+        "B",
+        "C",
+        "D",
+        "OFF",
+        "E"
+      ]
+    },
+    {
+      "semana": 8.0,
+      "data": "2026-03-02",
+      "meta_peso_kg": 71.4,
+      "peso_kg": 69.5,
+      "dias_treino_seg_a_dom": [
+        "OFF",
+        "A",
+        "B",
+        "C",
+        "D",
+        "OFF",
+        "E"
+      ]
+    },
+    {
+      "semana": 9.0,
+      "data": "2026-03-09",
+      "meta_peso_kg": 71.9,
+      "peso_kg": 70.5,
+      "dias_treino_seg_a_dom": [
+        "A",
+        "OFF",
+        "B",
+        "OFF",
+        "C",
+        "D",
+        "E"
+      ]
+    },
+    {
+      "semana": 10.0,
+      "data": "2026-03-16",
+      "meta_peso_kg": 72.4,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        "A",
+        "OFF",
+        "B",
+        "C",
+        "D",
+        "OFF",
+        "OFF"
+      ]
+    },
+    {
+      "semana": 11.0,
+      "data": "2026-03-23",
+      "meta_peso_kg": 72.8,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        "A",
+        "DOENTE",
+        "DOENTE",
+        "DOENTE",
+        "DOENTE",
+        "DOENTE",
+        "DOENTE"
+      ]
+    },
+    {
+      "semana": 12.0,
+      "data": "2026-03-30",
+      "meta_peso_kg": 73.3,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        "DOENTE",
+        "DOENTE",
+        "DOENTE",
+        "DOENTE",
+        "DOENTE",
+        "DOENTE",
+        "DOENTE"
+      ]
+    },
+    {
+      "semana": 13.0,
+      "data": "2026-04-06",
+      "meta_peso_kg": 73.8,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        "A",
+        "OFF",
+        "B",
+        "C",
+        "OFF",
+        "D",
+        "OFF"
+      ]
+    },
+    {
+      "semana": 14.0,
+      "data": "2026-04-13",
+      "meta_peso_kg": 74.2,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 15.0,
+      "data": "2026-04-20",
+      "meta_peso_kg": 74.7,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 16.0,
+      "data": "2026-04-27",
+      "meta_peso_kg": 75.2,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 17.0,
+      "data": "2026-05-04",
+      "meta_peso_kg": 75.6,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 18.0,
+      "data": "2026-05-11",
+      "meta_peso_kg": 76.1,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 19.0,
+      "data": "2026-05-18",
+      "meta_peso_kg": 76.6,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 20.0,
+      "data": "2026-05-25",
+      "meta_peso_kg": 77.0,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        "A",
+        "OFF",
+        "B",
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 21.0,
+      "data": "2026-06-01",
+      "meta_peso_kg": 77.5,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 22.0,
+      "data": "2026-06-08",
+      "meta_peso_kg": 78.0,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 23.0,
+      "data": "2026-06-15",
+      "meta_peso_kg": 78.4,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 24.0,
+      "data": "2026-06-22",
+      "meta_peso_kg": 78.9,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 25.0,
+      "data": "2026-06-29",
+      "meta_peso_kg": 79.4,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 26.0,
+      "data": "2026-07-06",
+      "meta_peso_kg": 79.8,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 27.0,
+      "data": "2026-07-13",
+      "meta_peso_kg": 80.3,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 28.0,
+      "data": "2026-07-20",
+      "meta_peso_kg": 80.8,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 29.0,
+      "data": "2026-07-27",
+      "meta_peso_kg": 81.2,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 30.0,
+      "data": "2026-08-03",
+      "meta_peso_kg": 81.7,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 31.0,
+      "data": "2026-08-10",
+      "meta_peso_kg": 82.2,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 32.0,
+      "data": "2026-08-17",
+      "meta_peso_kg": 82.6,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 33.0,
+      "data": "2026-08-24",
+      "meta_peso_kg": 83.1,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 34.0,
+      "data": "2026-08-31",
+      "meta_peso_kg": 83.6,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 35.0,
+      "data": "2026-09-07",
+      "meta_peso_kg": 84.0,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 36.0,
+      "data": "2026-09-14",
+      "meta_peso_kg": null,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 37.0,
+      "data": "2026-09-21",
+      "meta_peso_kg": null,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "semana": 38.0,
+      "data": "2026-09-28",
+      "meta_peso_kg": null,
+      "peso_kg": null,
+      "dias_treino_seg_a_dom": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    }
+  ]
+}
