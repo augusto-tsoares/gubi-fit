@@ -67,6 +67,16 @@ async function renderPeso(container) {
         </div>
       </div>
       <canvas id="composicao-chart" height="220"></canvas>
+
+      <h2 style="margin-top: 20px;">Distribuição percentual (registro mais recente)</h2>
+      <canvas id="composicao-donut" height="220"></canvas>
+      <div id="composicao-donut-vazio"></div>
+
+      <h2 style="margin-top: 20px;">Medidas por parte do corpo (registro mais recente)</h2>
+      <p class="ajuda-texto">Cada medida é um valor único (não separado por lado esquerdo/direito).</p>
+      <canvas id="composicao-barras" height="260"></canvas>
+      <div id="composicao-barras-vazio"></div>
+
       <div id="composicao-lista"></div>
     </div>
     <div class="toast" id="toast">Peso salvo!</div>
@@ -374,6 +384,7 @@ async function inicializarComposicaoCorporal(container) {
   container.querySelector('#btn-exportar-composicao').addEventListener('click', exportarComposicaoCSV);
 
   await desenharGraficoComposicao(container);
+  await renderGraficosResumoComposicao(container);
   await renderListaComposicao(container);
 }
 
@@ -481,6 +492,7 @@ async function salvarComposicao(container) {
   setTimeout(() => toast.classList.remove('show'), 2000);
 
   await desenharGraficoComposicao(container);
+  await renderGraficosResumoComposicao(container);
   await renderListaComposicao(container);
 }
 
@@ -596,6 +608,7 @@ async function importarComposicaoCSV(container, arquivo) {
 
   mostrarToastImportComposicao(container, `${novos} novos, ${atualizados} atualizados, ${ignorados} sem dados.`);
   await desenharGraficoComposicao(container);
+  await renderGraficosResumoComposicao(container);
   await renderListaComposicao(container);
 }
 
@@ -613,4 +626,120 @@ async function exportarComposicaoCSV() {
     linhas.push(COLUNAS_COMPOSICAO_CSV.map(c => r[c] ?? ''));
   }
   baixarCSV(linhas, 'gubi-fit-composicao.csv');
+}
+
+let composicaoDonutInstance = null;
+let composicaoBarrasInstance = null;
+
+const CAMPOS_PERCENTUAIS_DONUT = [
+  { chave: 'gordura_pct', label: '% Gordura', cor: '#D5A6BD' },
+  { chave: 'massa_muscular_pct', label: '% Massa muscular', cor: '#9FC5E8' },
+  { chave: 'agua_pct', label: '% Água', cor: '#A2C4C9' }
+];
+
+const CAMPOS_MEDIDAS_BARRAS = [
+  { chave: 'biceps_cm', label: 'Bíceps' },
+  { chave: 'peito_cm', label: 'Peito' },
+  { chave: 'busto_cm', label: 'Busto' },
+  { chave: 'cintura_cm', label: 'Cintura' },
+  { chave: 'quadril_cm', label: 'Quadril' },
+  { chave: 'coxa_cm', label: 'Coxa' },
+  { chave: 'panturrilha_cm', label: 'Panturrilha' }
+];
+
+async function renderGraficosResumoComposicao(container) {
+  const registros = await db.registrosMedidas.orderBy('data').toArray();
+
+  const ultimoComPercentuais = [...registros].reverse()
+    .find(r => CAMPOS_PERCENTUAIS_DONUT.some(c => r[c.chave] != null));
+  renderDonutComposicao(container, ultimoComPercentuais);
+
+  const ultimoComMedidas = [...registros].reverse()
+    .find(r => CAMPOS_MEDIDAS_BARRAS.some(c => r[c.chave] != null));
+  renderBarrasMedidas(container, ultimoComMedidas);
+}
+
+function renderDonutComposicao(container, registro) {
+  const canvas = container.querySelector('#composicao-donut');
+  const vazioEl = container.querySelector('#composicao-donut-vazio');
+  if (composicaoDonutInstance) {
+    composicaoDonutInstance.destroy();
+    composicaoDonutInstance = null;
+  }
+
+  const dados = registro
+    ? CAMPOS_PERCENTUAIS_DONUT.filter(c => registro[c.chave] != null)
+    : [];
+
+  if (dados.length === 0) {
+    canvas.hidden = true;
+    vazioEl.innerHTML = `<div class="empty-state">Sem % de gordura, massa muscular ou água registrados ainda.</div>`;
+    return;
+  }
+  canvas.hidden = false;
+  vazioEl.innerHTML = `<p class="ajuda-texto">Registro de ${formatarDataBr(registro.data)}. Os percentuais podem se sobrepor (ex: água já faz parte da massa muscular) — é uma visão rápida, não uma soma exata de 100%.</p>`;
+
+  const corTexto = getComputedStyle(document.body).getPropertyValue('--text').trim() || '#222';
+
+  composicaoDonutInstance = new Chart(canvas.getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: dados.map(d => d.label),
+      datasets: [{
+        data: dados.map(d => registro[d.chave]),
+        backgroundColor: dados.map(d => d.cor)
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: corTexto } }
+      }
+    }
+  });
+}
+
+function renderBarrasMedidas(container, registro) {
+  const canvas = container.querySelector('#composicao-barras');
+  const vazioEl = container.querySelector('#composicao-barras-vazio');
+  if (composicaoBarrasInstance) {
+    composicaoBarrasInstance.destroy();
+    composicaoBarrasInstance = null;
+  }
+
+  const presentes = registro
+    ? CAMPOS_MEDIDAS_BARRAS.filter(c => registro[c.chave] != null)
+    : [];
+
+  if (presentes.length === 0) {
+    canvas.hidden = true;
+    vazioEl.innerHTML = `<div class="empty-state">Sem medidas de corpo registradas ainda.</div>`;
+    return;
+  }
+  canvas.hidden = false;
+  vazioEl.innerHTML = '';
+
+  const corTexto = getComputedStyle(document.body).getPropertyValue('--text').trim() || '#222';
+  const corGrid = getComputedStyle(document.body).getPropertyValue('--border').trim() || '#ddd';
+
+  composicaoBarrasInstance = new Chart(canvas.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: presentes.map(c => c.label),
+      datasets: [{
+        label: `Medidas (cm) — ${formatarDataBr(registro.data)}`,
+        data: presentes.map(c => registro[c.chave]),
+        backgroundColor: '#B6D7A8'
+      }]
+    },
+    options: {
+      responsive: true,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: corTexto }, grid: { color: corGrid } },
+        y: { ticks: { color: corTexto }, grid: { color: corGrid } }
+      }
+    }
+  });
 }
