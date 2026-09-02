@@ -34,6 +34,7 @@ async function renderPeso(container) {
             <option value="3">3 meses</option>
             <option value="6">6 meses</option>
             <option value="12">1 ano</option>
+            <option value="todos">Todos os dados</option>
           </select>
         </div>
       </div>
@@ -58,6 +59,7 @@ async function renderPeso(container) {
             <option value="6">6 meses</option>
             <option value="12" selected>1 ano</option>
             <option value="24">2 anos</option>
+            <option value="todos">Todos os dados</option>
           </select>
         </div>
       </div>
@@ -83,7 +85,7 @@ async function renderPeso(container) {
   const janelaSelect = container.querySelector('#peso-janela');
   janelaSelect.value = String(state.pesoJanelaMeses);
   janelaSelect.addEventListener('change', () => {
-    state.pesoJanelaMeses = parseInt(janelaSelect.value, 10);
+    state.pesoJanelaMeses = janelaSelect.value === 'todos' ? 'todos' : parseInt(janelaSelect.value, 10);
     desenharGraficoPeso(container);
   });
 
@@ -189,7 +191,7 @@ async function desenharGraficoPeso(container) {
     : todosRegistrosGeral.filter(r => r.fase === filtro);
   const meta = await getMetaPeso();
 
-  const janela = calcularJanela(state.pesoJanelaMeses);
+  const janela = resolverJanela(state.pesoJanelaMeses, todosRegistros.map(r => r.data));
   if (meta && meta.data_alvo > janela.fim) janela.fim = meta.data_alvo;
   const ticks = gerarTimelineSemanal(janela.inicio, janela.fim);
   const labels = ticks.map(formatarDataBr);
@@ -366,7 +368,7 @@ async function inicializarComposicaoCorporal(container) {
   const janelaSelect = container.querySelector('#composicao-janela');
   janelaSelect.value = String(state.composicaoJanelaMeses);
   janelaSelect.addEventListener('change', () => {
-    state.composicaoJanelaMeses = parseInt(janelaSelect.value, 10);
+    state.composicaoJanelaMeses = janelaSelect.value === 'todos' ? 'todos' : parseInt(janelaSelect.value, 10);
     desenharGraficoComposicao(container);
   });
 
@@ -489,7 +491,7 @@ async function desenharGraficoComposicao(container) {
   const registros = await db.registrosMedidas.orderBy('data').toArray();
   const pontos = registros.filter(r => r[metricaChave] != null).map(r => ({ data: r.data, valor: r[metricaChave] }));
 
-  const janela = calcularJanela(state.composicaoJanelaMeses);
+  const janela = resolverJanela(state.composicaoJanelaMeses, pontos.map(p => p.data));
   const ticks = gerarTimelineSemanal(janela.inicio, janela.fim);
   const valores = encaixarNaTimeline(pontos, ticks);
   const labels = ticks.map(formatarDataBr);

@@ -50,6 +50,7 @@ async function renderHistoricoMusculacao(container) {
           <option value="3">3 meses</option>
           <option value="6">6 meses</option>
           <option value="12">1 ano</option>
+          <option value="todos">Todos os dados</option>
         </select>
       </div>
       <canvas id="historico-chart" height="220"></canvas>
@@ -68,7 +69,7 @@ async function renderHistoricoMusculacao(container) {
     atualizarHistorico(container, state.exercicioHistoricoId);
   });
   janelaSelect.addEventListener('change', () => {
-    state.historicoJanelaMeses = parseInt(janelaSelect.value, 10);
+    state.historicoJanelaMeses = janelaSelect.value === 'todos' ? 'todos' : parseInt(janelaSelect.value, 10);
     atualizarHistorico(container, state.exercicioHistoricoId);
   });
 
@@ -87,7 +88,7 @@ async function atualizarHistorico(container, exercicioId) {
     return { data: d, valor: cargas.length ? Math.max(...cargas) : null };
   });
 
-  const janela = calcularJanela(state.historicoJanelaMeses);
+  const janela = resolverJanela(state.historicoJanelaMeses, datasComRegistro);
   const ticks = gerarTimelineSemanal(janela.inicio, janela.fim);
   const valores = encaixarNaTimeline(registrosCargaMax, ticks);
   const labels = ticks.map(formatarDataBr);
@@ -154,6 +155,7 @@ async function renderHistoricoCardio(container) {
           <option value="3">3 meses</option>
           <option value="6">6 meses</option>
           <option value="12">1 ano</option>
+          <option value="todos">Todos os dados</option>
         </select>
       </div>
       <canvas id="cardio-chart" height="220"></canvas>
@@ -164,7 +166,7 @@ async function renderHistoricoCardio(container) {
   const janelaSelect = container.querySelector('#cardio-janela');
   janelaSelect.value = String(state.cardioJanelaMeses);
   janelaSelect.addEventListener('change', () => {
-    state.cardioJanelaMeses = parseInt(janelaSelect.value, 10);
+    state.cardioJanelaMeses = janelaSelect.value === 'todos' ? 'todos' : parseInt(janelaSelect.value, 10);
     atualizarHistoricoCardio(container);
   });
 
@@ -181,7 +183,7 @@ async function atualizarHistoricoCardio(container) {
     return { data: d, valor: duracoes.length ? duracoes.reduce((a, b) => a + b, 0) : null };
   });
 
-  const janela = calcularJanela(state.cardioJanelaMeses);
+  const janela = resolverJanela(state.cardioJanelaMeses, datasComRegistro);
   const ticks = gerarTimelineSemanal(janela.inicio, janela.fim);
   const valores = encaixarNaTimeline(registrosDuracaoTotal, ticks);
   const labels = ticks.map(formatarDataBr);

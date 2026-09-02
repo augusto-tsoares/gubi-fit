@@ -92,6 +92,24 @@ function calcularJanela(meses) {
   return { inicio: inicio.toISOString().slice(0, 10), fim: fim.toISOString().slice(0, 10) };
 }
 
+// Janela que cobre TODOS os registros de "datas" (nao limitada por meses) —
+// vai do mais antigo ate hoje (ou ate o mais recente, se ele for no futuro,
+// como acontece com a trajetoria de uma meta de peso).
+function calcularJanelaTudo(datas) {
+  if (!datas || datas.length === 0) return calcularJanela(1);
+  const inicio = datas.reduce((min, d) => (d < min ? d : min), datas[0]);
+  const maisRecente = datas.reduce((max, d) => (d > max ? d : max), datas[0]);
+  const fim = maisRecente > hoje() ? maisRecente : hoje();
+  return { inicio, fim };
+}
+
+// Resolve a janela a partir do valor do <select>: um numero de meses, ou a
+// string "todos" pra abranger o historico completo de "datas".
+function resolverJanela(valorJanela, datas) {
+  if (valorJanela === 'todos') return calcularJanelaTudo(datas);
+  return calcularJanela(valorJanela);
+}
+
 // Gera uma data por semana entre inicioISO e fimISO (inclusive), para servir
 // de eixo X continuo — assim uma semana sem registro aparece como um buraco
 // real no grafico em vez de simplesmente sumir.
