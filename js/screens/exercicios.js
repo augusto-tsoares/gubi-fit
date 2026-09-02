@@ -1,8 +1,18 @@
 async function renderExercicios(container) {
   container.innerHTML = `
-    <p class="aviso-armazenamento">Os dados deste app ficam armazenados apenas no navegador deste aparelho (não em um servidor). Limpar o cache/dados do navegador apaga tudo. Para evitar perda, recomendamos exportar o histórico (CSV) de vez em quando.</p>
+    <p class="aviso-armazenamento">Os dados deste app ficam armazenados apenas no navegador deste aparelho (não em um servidor). Limpar o cache/dados do navegador apaga tudo. Para evitar perda, recomendamos exportar o histórico de vez em quando.</p>
     <div class="card">
-      <h2>Importar histórico (CSV)</h2>
+      <h2>Backup completo</h2>
+      <p class="ajuda-texto">Um arquivo só com tudo (treinos, peso, composição e cardio). É o jeito mais simples de fazer backup ou levar seus dados pra outro aparelho.</p>
+      <div class="config-actions">
+        <label class="btn-primary file-btn" for="input-importar-tudo">Importar tudo</label>
+        <input type="file" id="input-importar-tudo" accept=".json,application/json" class="visually-hidden">
+        <button class="btn-primary" id="btn-exportar-tudo" type="button">Exportar tudo</button>
+      </div>
+      <div class="toast" id="toast-tudo">Feito!</div>
+    </div>
+    <div class="card">
+      <h2>Importar por tipo (CSV)</h2>
       <p class="ajuda-texto">Cada pessoa importa o próprio arquivo. Baixe um modelo em branco se for preencher do zero, ou exporte o seu daqui de baixo pra editar/guardar. O import não duplica: se uma linha já existe (mesma data/exercício/série), ela é ignorada.</p>
       <div class="config-actions">
         <label class="btn-primary file-btn" for="input-importar-treinos">Importar treinos (CSV)</label>
@@ -11,18 +21,22 @@ async function renderExercicios(container) {
         <input type="file" id="input-importar-peso" accept=".csv,text/csv" class="visually-hidden">
         <label class="btn-primary file-btn" for="input-importar-composicao">Importar composição (CSV)</label>
         <input type="file" id="input-importar-composicao" accept=".csv,text/csv" class="visually-hidden">
+        <label class="btn-primary file-btn" for="input-importar-cardio">Importar cardio (CSV)</label>
+        <input type="file" id="input-importar-cardio" accept=".csv,text/csv" class="visually-hidden">
       </div>
       <div class="toast" id="toast-config">Feito!</div>
     </div>
     <div class="card">
-      <h2>Modelos e exportação</h2>
+      <h2>Modelos e exportação por tipo (CSV)</h2>
       <div class="config-actions">
         <button class="btn-primary" id="btn-modelo-treinos" type="button">Baixar modelo de treinos (CSV)</button>
         <button class="btn-primary" id="btn-modelo-peso" type="button">Baixar modelo de peso (CSV)</button>
         <button class="btn-primary" id="btn-modelo-composicao" type="button">Baixar modelo de composição (CSV)</button>
+        <button class="btn-primary" id="btn-modelo-cardio" type="button">Baixar modelo de cardio (CSV)</button>
         <button class="btn-primary" id="btn-exportar-treinos" type="button">Exportar meus treinos (CSV)</button>
         <button class="btn-primary" id="btn-exportar-peso" type="button">Exportar meu peso (CSV)</button>
         <button class="btn-primary" id="btn-exportar-composicao" type="button">Exportar minha composição (CSV)</button>
+        <button class="btn-primary" id="btn-exportar-cardio" type="button">Exportar meu cardio (CSV)</button>
       </div>
     </div>
     <div class="card">
@@ -51,13 +65,28 @@ async function renderExercicios(container) {
     if (!arquivo) return;
     await importarComposicaoCSV(container, arquivo);
   });
+  container.querySelector('#input-importar-cardio').addEventListener('change', async (e) => {
+    const arquivo = e.target.files[0];
+    e.target.value = '';
+    if (!arquivo) return;
+    await importarCardioCSV(container, arquivo);
+  });
+  container.querySelector('#input-importar-tudo').addEventListener('change', async (e) => {
+    const arquivo = e.target.files[0];
+    e.target.value = '';
+    if (!arquivo) return;
+    await importarTudo(container, arquivo);
+  });
 
   container.querySelector('#btn-modelo-treinos').addEventListener('click', baixarModeloTreinos);
   container.querySelector('#btn-modelo-peso').addEventListener('click', baixarModeloPeso);
   container.querySelector('#btn-modelo-composicao').addEventListener('click', baixarModeloComposicao);
+  container.querySelector('#btn-modelo-cardio').addEventListener('click', baixarModeloCardio);
   container.querySelector('#btn-exportar-treinos').addEventListener('click', exportarTreinosCSV);
   container.querySelector('#btn-exportar-peso').addEventListener('click', exportarPesoCSV);
   container.querySelector('#btn-exportar-composicao').addEventListener('click', exportarComposicaoCSV);
+  container.querySelector('#btn-exportar-cardio').addEventListener('click', exportarCardioCSV);
+  container.querySelector('#btn-exportar-tudo').addEventListener('click', exportarTudo);
   container.querySelector('#btn-add-exercicio').addEventListener('click', () => criarExercicioNovo(container));
 
   await renderListaExercicios(container);
@@ -429,4 +458,179 @@ async function exportarComposicaoCSV() {
     linhas.push(COLUNAS_COMPOSICAO_CSV.map(c => r[c] ?? ''));
   }
   baixarCSV(linhas, 'gubi-fit-composicao.csv');
+}
+
+const COLUNAS_CARDIO_CSV = ['data', 'tipo', 'duracao_min', 'distancia_km'];
+
+async function importarCardioCSV(container, arquivo) {
+  const texto = await arquivo.text();
+  const linhas = parseCSV(texto);
+  if (linhas.length < 2) {
+    mostrarToastConfig(container, 'Arquivo vazio.');
+    return;
+  }
+  const cabecalho = linhas[0].map(h => h.trim().toLowerCase());
+  const idxData = cabecalho.indexOf('data');
+  const idxTipo = cabecalho.indexOf('tipo');
+  const idxDuracao = cabecalho.indexOf('duracao_min');
+  const idxDistancia = cabecalho.indexOf('distancia_km');
+  if (idxData === -1) {
+    mostrarToastConfig(container, 'Coluna "data" não encontrada no arquivo.');
+    return;
+  }
+
+  let importados = 0, ignorados = 0;
+  for (const linha of linhas.slice(1)) {
+    const data = linha[idxData]?.trim();
+    if (!data || data === 'AAAA-MM-DD') continue;
+    const tipo = idxTipo !== -1 ? (linha[idxTipo]?.trim() || 'Outro') : 'Outro';
+    const duracao = idxDuracao !== -1 ? parseNumeroDecimal(linha[idxDuracao]) : null;
+    const distancia = idxDistancia !== -1 ? parseNumeroDecimal(linha[idxDistancia]) : null;
+    if (duracao == null && distancia == null) { ignorados++; continue; }
+
+    // Cardio nao tem uma chave natural unica (podem existir varias sessoes
+    // no mesmo dia) — considera duplicata quando data+tipo+duracao+distancia
+    // batem exatamente com um registro que ja existe.
+    const jaExiste = await db.registrosCardio.where('data').equals(data)
+      .and(r => r.tipo === tipo && r.duracao_min === duracao && r.distancia_km === distancia).count();
+    if (jaExiste > 0) { ignorados++; continue; }
+
+    await db.registrosCardio.add({ data, tipo, duracao_min: duracao, distancia_km: distancia });
+    importados++;
+  }
+
+  mostrarToastConfig(container, `${importados} importados, ${ignorados} ignorados/duplicados.`);
+}
+
+function baixarModeloCardio() {
+  baixarCSV([COLUNAS_CARDIO_CSV, ['AAAA-MM-DD', 'Esteira', '30', '5']], 'modelo-cardio.csv');
+}
+
+async function exportarCardioCSV() {
+  const registros = await db.registrosCardio.orderBy('data').toArray();
+  const linhas = [COLUNAS_CARDIO_CSV];
+  for (const r of registros) {
+    linhas.push(COLUNAS_CARDIO_CSV.map(c => r[c] ?? ''));
+  }
+  baixarCSV(linhas, 'gubi-fit-cardio.csv');
+}
+
+// ---- Backup completo (JSON com os 4 tipos de dado de uma vez) ----
+
+async function exportarTudo() {
+  const [exercicios, registrosSeries, registrosPeso, registrosMedidas, registrosCardio] = await Promise.all([
+    db.exercicios.toArray(),
+    db.registrosSeries.toArray(),
+    db.registrosPeso.toArray(),
+    db.registrosMedidas.toArray(),
+    db.registrosCardio.toArray()
+  ]);
+  const porId = Object.fromEntries(exercicios.map(e => [e.id, e]));
+
+  const backup = {
+    versao: 1,
+    exportado_em: hoje(),
+    treinos: registrosSeries.map(r => ({
+      data: r.data,
+      treino: porId[r.exercicio_id]?.treino ?? '',
+      exercicio: porId[r.exercicio_id]?.nome ?? '(excluído)',
+      numero_serie: r.numero_serie,
+      carga_kg: r.carga_kg,
+      reps: r.reps
+    })),
+    peso: registrosPeso.map(r => ({ data: r.data, peso_kg: r.peso_kg, fase: r.fase ?? null })),
+    composicao: registrosMedidas.map(({ id, ...resto }) => resto),
+    cardio: registrosCardio.map(r => ({ data: r.data, tipo: r.tipo, duracao_min: r.duracao_min ?? null, distancia_km: r.distancia_km ?? null }))
+  };
+
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'gubi-fit-backup-completo.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+async function importarTudo(container, arquivo) {
+  const texto = await arquivo.text();
+  let backup;
+  try {
+    backup = JSON.parse(texto);
+  } catch {
+    mostrarToastTudo(container, 'Arquivo inválido — não é um JSON de backup válido.');
+    return;
+  }
+
+  const resumo = { treinos: 0, peso: 0, composicao: 0, cardio: 0 };
+
+  if (Array.isArray(backup.treinos)) {
+    const exercicios = await db.exercicios.toArray();
+    const porChave = new Map(exercicios.map(e => [`${e.treino}|${e.nome}`.toLowerCase(), e]));
+    for (const linha of backup.treinos) {
+      if (!linha.data) continue;
+      const ex = porChave.get(`${linha.treino}|${linha.exercicio}`.toLowerCase());
+      if (!ex) continue;
+      const numeroSerie = linha.numero_serie || 1;
+      const jaExiste = await db.registrosSeries.where('exercicio_id').equals(ex.id)
+        .and(r => r.data === linha.data && r.numero_serie === numeroSerie).count();
+      if (jaExiste > 0) continue;
+      await db.registrosSeries.add({
+        exercicio_id: ex.id, data: linha.data, semana_treino: null,
+        numero_serie: numeroSerie, carga_kg: linha.carga_kg ?? null, reps: linha.reps ?? null
+      });
+      resumo.treinos++;
+    }
+  }
+
+  if (Array.isArray(backup.peso)) {
+    for (const linha of backup.peso) {
+      if (!linha.data || linha.peso_kg == null) continue;
+      const existente = await db.registrosPeso.where('data').equals(linha.data).first();
+      if (existente) {
+        await db.registrosPeso.update(existente.id, { peso_kg: linha.peso_kg, fase: linha.fase ?? existente.fase });
+      } else {
+        await db.registrosPeso.add({ data: linha.data, peso_kg: linha.peso_kg, fase: linha.fase ?? null });
+      }
+      resumo.peso++;
+    }
+  }
+
+  if (Array.isArray(backup.composicao)) {
+    for (const linha of backup.composicao) {
+      if (!linha.data) continue;
+      const { data, ...campos } = linha;
+      const camposPreenchidos = Object.fromEntries(Object.entries(campos).filter(([, v]) => v != null));
+      if (Object.keys(camposPreenchidos).length === 0) continue;
+      const existente = await db.registrosMedidas.where('data').equals(data).first();
+      if (existente) await db.registrosMedidas.update(existente.id, camposPreenchidos);
+      else await db.registrosMedidas.add({ data, ...camposPreenchidos });
+      resumo.composicao++;
+    }
+  }
+
+  if (Array.isArray(backup.cardio)) {
+    for (const linha of backup.cardio) {
+      if (!linha.data || (linha.duracao_min == null && linha.distancia_km == null)) continue;
+      const jaExiste = await db.registrosCardio.where('data').equals(linha.data)
+        .and(r => r.tipo === linha.tipo && r.duracao_min === linha.duracao_min && r.distancia_km === linha.distancia_km).count();
+      if (jaExiste > 0) continue;
+      await db.registrosCardio.add({
+        data: linha.data, tipo: linha.tipo || 'Outro',
+        duracao_min: linha.duracao_min ?? null, distancia_km: linha.distancia_km ?? null
+      });
+      resumo.cardio++;
+    }
+  }
+
+  mostrarToastTudo(container, `Importado: ${resumo.treinos} séries, ${resumo.peso} pesos, ${resumo.composicao} composições, ${resumo.cardio} cardios.`);
+}
+
+function mostrarToastTudo(container, texto) {
+  const toast = container.querySelector('#toast-tudo');
+  toast.textContent = texto;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
 }

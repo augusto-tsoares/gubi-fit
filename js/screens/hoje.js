@@ -195,13 +195,17 @@ async function renderExercicioCard(ex, linhasRascunho) {
     const numSeriesIniciais = Math.max(ex.series_alvo || 3, 1);
     for (let i = 1; i <= numSeriesIniciais; i++) {
       const cargaSugerida = Number.isFinite(sugestao.carga_sugerida) ? sugestao.carga_sugerida : '';
-      // Se a serie correspondente da ultima sessao nao chegou no teto da
-      // faixa, preenche os reps com o que foi feito — um alvo claro pra
-      // bater/superar dessa vez, ao inves de deixar o campo em branco.
+      // Progressao dupla: so faz sentido subir os reps quando a carga NAO
+      // esta subindo (tipo 'manter') — aí o alvo e sempre 1 rep a mais que
+      // a ultima vez nessa serie, ate o teto da faixa. Quando a carga sobe
+      // (aumentar/aumentar_leve) ou cai (reduzir), o proprio numero de reps
+      // muda de patamar com o novo peso, entao nao faz sentido "herdar" o
+      // valor antigo — o campo fica em branco pra nao induzir a um numero
+      // que nao bate mais com a carga nova.
       const serieCorrespondente = seriesUltima.find(s => s.numero_serie === i);
       let repsSugerido = '';
-      if (faixa && serieCorrespondente && Number.isFinite(serieCorrespondente.reps) && serieCorrespondente.reps < faixa.max) {
-        repsSugerido = serieCorrespondente.reps;
+      if (sugestao.tipo === 'manter' && faixa && serieCorrespondente && Number.isFinite(serieCorrespondente.reps)) {
+        repsSugerido = Math.min(serieCorrespondente.reps + 1, faixa.max);
       }
       linhasIniciais.push(linhaSerieHtml(i, cargaSugerida, repsSugerido));
     }
