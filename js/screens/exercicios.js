@@ -9,6 +9,8 @@ async function renderExercicios(container) {
         <input type="file" id="input-importar-treinos" accept=".csv,text/csv" class="visually-hidden">
         <label class="btn-primary file-btn" for="input-importar-peso">Importar peso (CSV)</label>
         <input type="file" id="input-importar-peso" accept=".csv,text/csv" class="visually-hidden">
+        <label class="btn-primary file-btn" for="input-importar-composicao">Importar composição (CSV)</label>
+        <input type="file" id="input-importar-composicao" accept=".csv,text/csv" class="visually-hidden">
       </div>
       <div class="toast" id="toast-config">Feito!</div>
     </div>
@@ -17,8 +19,10 @@ async function renderExercicios(container) {
       <div class="config-actions">
         <button class="btn-primary" id="btn-modelo-treinos" type="button">Baixar modelo de treinos (CSV)</button>
         <button class="btn-primary" id="btn-modelo-peso" type="button">Baixar modelo de peso (CSV)</button>
+        <button class="btn-primary" id="btn-modelo-composicao" type="button">Baixar modelo de composição (CSV)</button>
         <button class="btn-primary" id="btn-exportar-treinos" type="button">Exportar meus treinos (CSV)</button>
         <button class="btn-primary" id="btn-exportar-peso" type="button">Exportar meu peso (CSV)</button>
+        <button class="btn-primary" id="btn-exportar-composicao" type="button">Exportar minha composição (CSV)</button>
       </div>
     </div>
     <div class="card">
@@ -41,11 +45,19 @@ async function renderExercicios(container) {
     if (!arquivo) return;
     await importarPesoCSV(container, arquivo);
   });
+  container.querySelector('#input-importar-composicao').addEventListener('change', async (e) => {
+    const arquivo = e.target.files[0];
+    e.target.value = '';
+    if (!arquivo) return;
+    await importarComposicaoCSV(container, arquivo);
+  });
 
   container.querySelector('#btn-modelo-treinos').addEventListener('click', baixarModeloTreinos);
   container.querySelector('#btn-modelo-peso').addEventListener('click', baixarModeloPeso);
+  container.querySelector('#btn-modelo-composicao').addEventListener('click', baixarModeloComposicao);
   container.querySelector('#btn-exportar-treinos').addEventListener('click', exportarTreinosCSV);
   container.querySelector('#btn-exportar-peso').addEventListener('click', exportarPesoCSV);
+  container.querySelector('#btn-exportar-composicao').addEventListener('click', exportarComposicaoCSV);
   container.querySelector('#btn-add-exercicio').addEventListener('click', () => criarExercicioNovo(container));
 
   await renderListaExercicios(container);
@@ -357,4 +369,64 @@ async function importarPesoCSV(container, arquivo) {
   }
 
   mostrarToastConfig(container, `${novos} novos, ${atualizados} atualizados.`);
+}
+
+const COLUNAS_COMPOSICAO_CSV = ['data', ...METRICAS_COMPOSICAO.map(m => m.chave)];
+
+async function importarComposicaoCSV(container, arquivo) {
+  const texto = await arquivo.text();
+  const linhas = parseCSV(texto);
+  if (linhas.length < 2) {
+    mostrarToastConfig(container, 'Arquivo vazio.');
+    return;
+  }
+  const cabecalho = linhas[0].map(h => h.trim().toLowerCase());
+  const idx = {};
+  COLUNAS_COMPOSICAO_CSV.forEach(c => { idx[c] = cabecalho.indexOf(c); });
+  if (idx.data === -1) {
+    mostrarToastConfig(container, 'Coluna "data" não encontrada no arquivo.');
+    return;
+  }
+
+  let novos = 0, atualizados = 0, ignorados = 0;
+  for (const linha of linhas.slice(1)) {
+    const data = linha[idx.data]?.trim();
+    if (!data || data === 'AAAA-MM-DD') continue;
+
+    const registro = { data };
+    let temAlgumDado = false;
+    for (const campo of COLUNAS_COMPOSICAO_CSV) {
+      if (campo === 'data' || idx[campo] === -1) continue;
+      const valor = parseNumeroDecimal(linha[idx[campo]]);
+      if (valor != null) {
+        registro[campo] = valor;
+        temAlgumDado = true;
+      }
+    }
+    if (!temAlgumDado) { ignorados++; continue; }
+
+    const existente = await db.registrosMedidas.where('data').equals(data).first();
+    if (existente) {
+      await db.registrosMedidas.update(existente.id, registro);
+      atualizados++;
+    } else {
+      await db.registrosMedidas.add(registro);
+      novos++;
+    }
+  }
+
+  mostrarToastConfig(container, `${novos} novos, ${atualizados} atualizados, ${ignorados} sem dados.`);
+}
+
+function baixarModeloComposicao() {
+  baixarCSV([COLUNAS_COMPOSICAO_CSV, ['AAAA-MM-DD', ...COLUNAS_COMPOSICAO_CSV.slice(1).map(() => '')]], 'modelo-composicao.csv');
+}
+
+async function exportarComposicaoCSV() {
+  const registros = await db.registrosMedidas.orderBy('data').toArray();
+  const linhas = [COLUNAS_COMPOSICAO_CSV];
+  for (const r of registros) {
+    linhas.push(COLUNAS_COMPOSICAO_CSV.map(c => r[c] ?? ''));
+  }
+  baixarCSV(linhas, 'gubi-fit-composicao.csv');
 }

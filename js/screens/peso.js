@@ -46,12 +46,7 @@ async function renderPeso(container) {
       <p class="ajuda-texto">Bioimpedância e medidas — não precisa preencher toda pesagem, só quando tiver esses dados (ex: a cada 3-6 meses).</p>
       <button class="add-serie-btn" id="btn-toggle-composicao" type="button">+ Novo registro de composição</button>
       <div id="composicao-form-wrap" hidden></div>
-      <div class="config-actions" style="margin-top: 10px;">
-        <label class="btn-primary file-btn" for="input-importar-composicao">Importar composição (CSV)</label>
-        <input type="file" id="input-importar-composicao" accept=".csv,text/csv" class="visually-hidden">
-        <button class="btn-primary" id="btn-exportar-composicao" type="button">Exportar composição (CSV)</button>
-      </div>
-      <div class="toast" id="toast-import-composicao">Feito!</div>
+      <p class="ajuda-texto" style="margin-top: 10px;">Importar/exportar CSV de composição fica na aba Exercícios, junto com os outros dados.</p>
       <div class="card-header-row" style="margin-top: 16px;">
         <h2 style="margin: 0;">Evolução</h2>
         <div class="filtros-peso">
@@ -375,14 +370,6 @@ async function inicializarComposicaoCorporal(container) {
     desenharGraficoComposicao(container);
   });
 
-  container.querySelector('#input-importar-composicao').addEventListener('change', async (e) => {
-    const arquivo = e.target.files[0];
-    e.target.value = '';
-    if (!arquivo) return;
-    await importarComposicaoCSV(container, arquivo);
-  });
-  container.querySelector('#btn-exportar-composicao').addEventListener('click', exportarComposicaoCSV);
-
   await desenharGraficoComposicao(container);
   await renderGraficosResumoComposicao(container);
   await renderListaComposicao(container);
@@ -562,71 +549,9 @@ async function renderListaComposicao(container) {
   el.innerHTML = `<h2>Últimos registros</h2>${linhas}`;
 }
 
-const COLUNAS_COMPOSICAO_CSV = ['data', ...METRICAS_COMPOSICAO.map(m => m.chave)];
-
-async function importarComposicaoCSV(container, arquivo) {
-  const texto = await arquivo.text();
-  const linhas = parseCSV(texto);
-  if (linhas.length < 2) {
-    mostrarToastImportComposicao(container, 'Arquivo vazio.');
-    return;
-  }
-  const cabecalho = linhas[0].map(h => h.trim().toLowerCase());
-  const idx = {};
-  COLUNAS_COMPOSICAO_CSV.forEach(c => { idx[c] = cabecalho.indexOf(c); });
-  if (idx.data === -1) {
-    mostrarToastImportComposicao(container, 'Coluna "data" não encontrada no arquivo.');
-    return;
-  }
-
-  let novos = 0, atualizados = 0, ignorados = 0;
-  for (const linha of linhas.slice(1)) {
-    const data = linha[idx.data]?.trim();
-    if (!data) continue;
-
-    const registro = { data };
-    let temAlgumDado = false;
-    for (const campo of COLUNAS_COMPOSICAO_CSV) {
-      if (campo === 'data' || idx[campo] === -1) continue;
-      const valor = parseNumeroDecimal(linha[idx[campo]]);
-      if (valor != null) {
-        registro[campo] = valor;
-        temAlgumDado = true;
-      }
-    }
-    if (!temAlgumDado) { ignorados++; continue; }
-
-    const existente = await db.registrosMedidas.where('data').equals(data).first();
-    if (existente) {
-      await db.registrosMedidas.update(existente.id, registro);
-      atualizados++;
-    } else {
-      await db.registrosMedidas.add(registro);
-      novos++;
-    }
-  }
-
-  mostrarToastImportComposicao(container, `${novos} novos, ${atualizados} atualizados, ${ignorados} sem dados.`);
-  await desenharGraficoComposicao(container);
-  await renderGraficosResumoComposicao(container);
-  await renderListaComposicao(container);
-}
-
-function mostrarToastImportComposicao(container, texto) {
-  const toast = container.querySelector('#toast-import-composicao');
-  toast.textContent = texto;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
-}
-
-async function exportarComposicaoCSV() {
-  const registros = await db.registrosMedidas.orderBy('data').toArray();
-  const linhas = [COLUNAS_COMPOSICAO_CSV];
-  for (const r of registros) {
-    linhas.push(COLUNAS_COMPOSICAO_CSV.map(c => r[c] ?? ''));
-  }
-  baixarCSV(linhas, 'gubi-fit-composicao.csv');
-}
+// Import/export CSV de composicao ficam em js/screens/exercicios.js, junto
+// com os outros botoes de dados (treinos/peso) — usam METRICAS_COMPOSICAO
+// definido aqui em cima.
 
 let composicaoDonutInstance = null;
 let composicaoBarrasInstance = null;
