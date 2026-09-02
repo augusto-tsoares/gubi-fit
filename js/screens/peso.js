@@ -59,6 +59,7 @@ async function renderPeso(container) {
             <option value="6">6 meses</option>
             <option value="12" selected>1 ano</option>
             <option value="24">2 anos</option>
+            <option value="60">5 anos</option>
             <option value="todos">Todos os dados</option>
           </select>
         </div>
