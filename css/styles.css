@@ -168,6 +168,27 @@ main {
   margin: 0 auto;
 }
 
+.data-registro-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.data-registro-row label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.data-registro-row input[type="date"] {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  padding: 2px 0;
+}
+
 .treino-tabs-wrap {
   position: relative;
   margin: 0 -16px 16px -16px;
@@ -295,7 +316,7 @@ main {
   text-align: center;
 }
 
-.serie-row input[type="number"] {
+.serie-row input {
   width: 100%;
   padding: 10px 8px;
   border-radius: 8px;
@@ -422,7 +443,7 @@ main {
   align-items: center;
 }
 
-.form-row input[type="number"], .form-row input[type="date"] {
+.form-row input {
   flex: 1 1 120px;
   min-width: 0;
   padding: 12px;

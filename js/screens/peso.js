@@ -16,7 +16,7 @@ async function renderPeso(container) {
       <h2>Registrar peso de hoje</h2>
       <div class="form-row">
         <input type="date" id="peso-data" value="${hoje()}">
-        <input type="number" id="peso-valor" inputmode="decimal" step="0.1" placeholder="kg">
+        <input type="text" id="peso-valor" inputmode="decimal" placeholder="kg">
         <button class="btn-primary" id="peso-salvar">Salvar</button>
       </div>
     </div>
@@ -69,8 +69,8 @@ async function renderPeso(container) {
 
 async function salvarPeso(container) {
   const data = container.querySelector('#peso-data').value;
-  const valor = parseFloat(container.querySelector('#peso-valor').value);
-  if (!data || isNaN(valor)) return;
+  const valor = parseNumeroDecimal(container.querySelector('#peso-valor').value);
+  if (!data || valor == null) return;
 
   const fase = await getFaseAtual();
   const existente = await db.registrosPeso.where('data').equals(data).first();
@@ -98,7 +98,7 @@ async function renderMetaPeso(container) {
     el.innerHTML = `
       <h2>Definir meta de peso</h2>
       <div class="meta-peso-form">
-        <input type="number" id="meta-peso-valor" inputmode="decimal" step="0.1" placeholder="peso desejado (kg)">
+        <input type="text" id="meta-peso-valor" inputmode="decimal" placeholder="peso desejado (kg)">
         <select id="meta-peso-prazo">
           <option value="1">em 1 mês</option>
           <option value="3" selected>em 3 meses</option>
@@ -133,9 +133,9 @@ async function renderMetaPeso(container) {
 }
 
 async function salvarMetaPeso(container) {
-  const valor = parseFloat(container.querySelector('#meta-peso-valor').value);
+  const valor = parseNumeroDecimal(container.querySelector('#meta-peso-valor').value);
   const prazo = parseInt(container.querySelector('#meta-peso-prazo').value, 10);
-  if (isNaN(valor)) return;
+  if (valor == null) return;
 
   const registros = await db.registrosPeso.orderBy('data').toArray();
   const ultimo = [...registros].reverse().find(r => r.peso_kg != null);

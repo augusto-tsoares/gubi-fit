@@ -41,6 +41,7 @@ function limparRascunho(data, treino) {
 }
 
 async function renderHoje(container) {
+  if (!state.dataRegistro) state.dataRegistro = hoje();
   const letrasDisponiveis = await treinosDisponiveis();
   const sugerido = await proximoTreinoSugerido();
   let treinoAtivo = state.treinoSelecionado || sugerido;
@@ -48,6 +49,10 @@ async function renderHoje(container) {
   state.treinoSelecionado = treinoAtivo;
 
   container.innerHTML = `
+    <div class="data-registro-row">
+      <label for="data-registro">Registrando para</label>
+      <input type="date" id="data-registro" value="${state.dataRegistro}" max="${hoje()}">
+    </div>
     <div class="treino-tabs-wrap">
       <div class="treino-tabs" id="treino-tabs"></div>
     </div>
@@ -55,7 +60,7 @@ async function renderHoje(container) {
     <button class="salvar-treino-btn" id="salvar-treino-btn">Salvar treino</button>
     <div class="toast" id="toast">Treino salvo!</div>
     <div class="card cardio-card">
-      <h2>Cardio de hoje</h2>
+      <h2 id="cardio-titulo">Cardio de hoje</h2>
       <div class="edit-row">
         <select id="cardio-tipo">
           ${TIPOS_CARDIO.map(t => `<option value="${t}">${t}</option>`).join('')}
@@ -63,12 +68,20 @@ async function renderHoje(container) {
       </div>
       <div class="form-row">
         <input type="number" id="cardio-duracao" inputmode="numeric" step="1" min="0" placeholder="minutos">
-        <input type="number" id="cardio-distancia" inputmode="decimal" step="0.1" min="0" placeholder="km (opcional)">
+        <input type="text" id="cardio-distancia" inputmode="decimal" placeholder="km (opcional)">
         <button class="btn-primary" id="cardio-salvar" type="button">Salvar cardio</button>
       </div>
       <div id="cardio-lista-hoje"></div>
     </div>
   `;
+
+  container.querySelector('#data-registro').addEventListener('change', (e) => {
+    state.dataRegistro = e.target.value || hoje();
+    renderHoje(container);
+  });
+
+  const cardioTitulo = container.querySelector('#cardio-titulo');
+  cardioTitulo.textContent = state.dataRegistro === hoje() ? 'Cardio de hoje' : `Cardio em ${formatarDataBr(state.dataRegistro)}`;
 
   const tabsEl = container.querySelector('#treino-tabs');
   tabsEl.innerHTML = letrasDisponiveis.map(t => `
@@ -87,7 +100,7 @@ async function renderHoje(container) {
   await renderExerciciosDoTreino(container.querySelector('#exercicios-lista'), treinoAtivo);
 
   container.querySelector('#exercicios-lista').addEventListener('input', () => {
-    salvarRascunho(container, hoje(), state.treinoSelecionado);
+    salvarRascunho(container, state.dataRegistro, state.treinoSelecionado);
   });
 
   container.querySelector('#salvar-treino-btn').addEventListener('click', () => salvarTreino(container));
@@ -97,7 +110,7 @@ async function renderHoje(container) {
 }
 
 async function renderCardioDeHoje(container) {
-  const data = hoje();
+  const data = state.dataRegistro;
   const registros = await db.registrosCardio.where('data').equals(data).toArray();
   const el = container.querySelector('#cardio-lista-hoje');
 
@@ -126,13 +139,13 @@ async function salvarCardio(container) {
   const tipo = container.querySelector('#cardio-tipo').value;
   const duracaoInput = container.querySelector('#cardio-duracao');
   const distanciaInput = container.querySelector('#cardio-distancia');
-  const duracao = duracaoInput.value === '' ? null : parseFloat(duracaoInput.value);
-  const distancia = distanciaInput.value === '' ? null : parseFloat(distanciaInput.value);
+  const duracao = duracaoInput.value === '' ? null : parseNumeroDecimal(duracaoInput.value);
+  const distancia = distanciaInput.value === '' ? null : parseNumeroDecimal(distanciaInput.value);
 
   if (duracao == null && distancia == null) return;
 
   await db.registrosCardio.add({
-    data: hoje(),
+    data: state.dataRegistro,
     tipo,
     duracao_min: duracao,
     distancia_km: distancia
@@ -150,7 +163,7 @@ async function renderExerciciosDoTreino(el, treino) {
     return;
   }
 
-  const rascunho = lerRascunho(hoje(), treino);
+  const rascunho = lerRascunho(state.dataRegistro, treino);
   const partes = await Promise.all(exercicios.map(ex => renderExercicioCard(ex, rascunho[ex.id])));
   el.innerHTML = partes.join('');
 
@@ -168,10 +181,9 @@ async function renderExercicioCard(ex, linhasRascunho) {
   const datas = Object.keys(grupos).sort();
   const ultimaData = datas[datas.length - 1];
   const seriesUltima = ultimaData ? grupos[ultimaData].sort((a, b) => a.numero_serie - b.numero_serie) : [];
-  const cargasHistoricas = todosRegistros.map(r => r.carga_kg).filter(c => Number.isFinite(c));
-  const cargaMaximaHistorica = cargasHistoricas.length ? Math.max(...cargasHistoricas) : null;
 
-  const sugestao = sugerirCarga(ex, seriesUltima, cargaMaximaHistorica);
+  const sugestao = sugerirCarga(ex, seriesUltima);
+  const faixa = parseFaixaReps(ex.reps_alvo);
   const treinoCorVar = `var(--treino-${ex.treino.toLowerCase()}-bg)`;
 
   const linhasIniciais = [];
@@ -183,7 +195,15 @@ async function renderExercicioCard(ex, linhasRascunho) {
     const numSeriesIniciais = Math.max(ex.series_alvo || 3, 1);
     for (let i = 1; i <= numSeriesIniciais; i++) {
       const cargaSugerida = Number.isFinite(sugestao.carga_sugerida) ? sugestao.carga_sugerida : '';
-      linhasIniciais.push(linhaSerieHtml(i, cargaSugerida, ''));
+      // Se a serie correspondente da ultima sessao nao chegou no teto da
+      // faixa, preenche os reps com o que foi feito — um alvo claro pra
+      // bater/superar dessa vez, ao inves de deixar o campo em branco.
+      const serieCorrespondente = seriesUltima.find(s => s.numero_serie === i);
+      let repsSugerido = '';
+      if (faixa && serieCorrespondente && Number.isFinite(serieCorrespondente.reps) && serieCorrespondente.reps < faixa.max) {
+        repsSugerido = serieCorrespondente.reps;
+      }
+      linhasIniciais.push(linhaSerieHtml(i, cargaSugerida, repsSugerido));
     }
   }
 
@@ -210,7 +230,7 @@ function linhaSerieHtml(numero, carga, reps) {
   return `
     <div class="serie-row">
       <div class="serie-num">${numero}</div>
-      <input type="number" inputmode="decimal" step="0.5" placeholder="kg" class="input-carga" value="${carga}">
+      <input type="text" inputmode="decimal" placeholder="kg" class="input-carga" value="${carga}">
       <input type="number" inputmode="numeric" step="1" placeholder="reps" class="input-reps" value="${reps}">
       <button type="button" class="serie-remove" title="remover">×</button>
     </div>
@@ -228,7 +248,7 @@ function adicionarLinhaSerie(btn) {
 }
 
 async function salvarTreino(container) {
-  const data = hoje();
+  const data = state.dataRegistro;
   const cards = container.querySelectorAll('.exercicio-card');
   let totalSalvo = 0;
 
@@ -245,8 +265,8 @@ async function salvarTreino(container) {
         data,
         semana_treino: null,
         numero_serie: numero,
-        carga_kg: carga === '' ? null : parseFloat(carga),
-        reps: reps === '' ? null : parseFloat(reps)
+        carga_kg: parseNumeroDecimal(carga),
+        reps: parseNumeroDecimal(reps)
       });
       numero++;
       totalSalvo++;
@@ -254,7 +274,9 @@ async function salvarTreino(container) {
   }
 
   const toast = container.querySelector('#toast');
-  toast.textContent = totalSalvo > 0 ? 'Treino salvo!' : 'Nenhuma série preenchida.';
+  toast.textContent = totalSalvo > 0
+    ? (data === hoje() ? 'Treino salvo!' : `Treino salvo em ${formatarDataBr(data)}!`)
+    : 'Nenhuma série preenchida.';
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2000);
 

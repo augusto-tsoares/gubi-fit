@@ -30,21 +30,14 @@ function ehIsolador(nomeExercicio) {
 }
 
 /**
- * Sugere carga para a proxima sessao. A carga-base e sempre o maior peso ja
- * registrado para o exercicio (recorde pessoal) — o desempenho da ultima
- * sessao (reps) so decide se sobe, mantem ou reduz a partir desse recorde.
+ * Sugere carga para a proxima sessao. A carga-base e a maior carga da
+ * ULTIMA sessao registrada (nao o recorde histórico) — assim, numa semana
+ * em que a carga precisou cair (deload, cansaço etc), a sugestão acompanha
+ * essa queda em vez de insistir no recorde antigo.
  * seriesUltimaSessao: [{numero_serie, carga_kg, reps}], ordenadas por numero_serie
- * cargaMaximaHistorica: maior carga_kg ja registrada para o exercicio (ou null)
  */
-function sugerirCarga(exercicio, seriesUltimaSessao, cargaMaximaHistorica) {
+function sugerirCarga(exercicio, seriesUltimaSessao) {
   if (!seriesUltimaSessao || seriesUltimaSessao.length === 0) {
-    if (cargaMaximaHistorica != null) {
-      return {
-        tipo: 'recorde',
-        carga_sugerida: cargaMaximaHistorica,
-        mensagem: `Sem sessão recente — sugestão baseada no seu recorde: ${cargaMaximaHistorica}kg.`
-      };
-    }
     return { tipo: 'sem_historico', mensagem: 'Sem histórico ainda — registre a primeira sessão.' };
   }
   const faixa = parseFaixaReps(exercicio.reps_alvo);
@@ -52,9 +45,8 @@ function sugerirCarga(exercicio, seriesUltimaSessao, cargaMaximaHistorica) {
     return { tipo: 'indefinido', mensagem: 'Não foi possível interpretar a faixa de reps.' };
   }
 
-  const base = cargaMaximaHistorica != null
-    ? cargaMaximaHistorica
-    : (seriesUltimaSessao.find(s => s.carga_kg != null)?.carga_kg ?? null);
+  const cargasUltimaSessao = seriesUltimaSessao.map(s => s.carga_kg).filter(c => Number.isFinite(c));
+  const base = cargasUltimaSessao.length ? Math.max(...cargasUltimaSessao) : null;
   const primeira = seriesUltimaSessao[0];
   const algumaAbaixoDoMinimo = seriesUltimaSessao.some(s => s.reps != null && s.reps < faixa.min);
   const isolador = ehIsolador(exercicio.nome);
@@ -89,7 +81,7 @@ function sugerirCarga(exercicio, seriesUltimaSessao, cargaMaximaHistorica) {
     };
   }
 
-  return { tipo: 'manter', carga_sugerida: base, mensagem: 'Dentro da faixa — mantenha a carga (baseado no seu recorde).' };
+  return { tipo: 'manter', carga_sugerida: base, mensagem: 'Dentro da faixa — mantenha a carga.' };
 }
 
 // Janela de tempo (em meses) terminando hoje, para os graficos.
@@ -167,6 +159,17 @@ function diasDesde(dataISO) {
   const d1 = new Date(dataISO + 'T00:00:00');
   const d2 = new Date(hoje() + 'T00:00:00');
   return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+}
+
+// Alguns teclados numericos (iPhone em PT-BR, por ex.) so mostram "," e nao
+// "." — e o input, sendo type=text, nao rejeita nem um nem outro. Aceita os
+// dois na hora de converter pra numero.
+function parseNumeroDecimal(valor) {
+  if (valor == null) return null;
+  const texto = String(valor).trim().replace(',', '.');
+  if (texto === '') return null;
+  const n = parseFloat(texto);
+  return Number.isFinite(n) ? n : null;
 }
 
 function escapeHtml(valor) {
