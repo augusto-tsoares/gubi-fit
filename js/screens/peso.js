@@ -41,7 +41,30 @@ async function renderPeso(container) {
     </div>
     <div class="card" id="peso-resumo"></div>
     <div class="card" id="peso-tabela"></div>
+    <div class="card">
+      <h2>Composição corporal</h2>
+      <p class="ajuda-texto">Bioimpedância e medidas — não precisa preencher toda pesagem, só quando tiver esses dados (ex: a cada 3-6 meses).</p>
+      <button class="add-serie-btn" id="btn-toggle-composicao" type="button">+ Novo registro de composição</button>
+      <div id="composicao-form-wrap" hidden></div>
+      <div class="card-header-row" style="margin-top: 16px;">
+        <h2 style="margin: 0;">Evolução</h2>
+        <div class="filtros-peso">
+          <select class="janela-select" id="composicao-metrica">
+            ${METRICAS_COMPOSICAO.map(m => `<option value="${m.chave}">${m.label}</option>`).join('')}
+          </select>
+          <select class="janela-select" id="composicao-janela">
+            <option value="3">3 meses</option>
+            <option value="6">6 meses</option>
+            <option value="12" selected>1 ano</option>
+            <option value="24">2 anos</option>
+          </select>
+        </div>
+      </div>
+      <canvas id="composicao-chart" height="220"></canvas>
+      <div id="composicao-lista"></div>
+    </div>
     <div class="toast" id="toast">Peso salvo!</div>
+    <div class="toast" id="toast-composicao">Registro salvo!</div>
   `;
 
   container.querySelector('#peso-salvar').addEventListener('click', () => salvarPeso(container));
@@ -65,6 +88,7 @@ async function renderPeso(container) {
   await desenharGraficoPeso(container);
   await renderResumoPeso(container);
   await renderTabelaPeso(container);
+  await inicializarComposicaoCorporal(container);
 }
 
 async function salvarPeso(container) {
@@ -286,4 +310,228 @@ async function renderTabelaPeso(container) {
       <tbody>${linhas}</tbody>
     </table>
   `;
+}
+
+const METRICAS_COMPOSICAO = [
+  { chave: 'peso_kg', label: 'Peso (kg)' },
+  { chave: 'gordura_pct', label: '% Gordura corporal' },
+  { chave: 'massa_muscular_pct', label: '% Massa muscular' },
+  { chave: 'agua_pct', label: '% Água corporal' },
+  { chave: 'massa_ossea_kg', label: 'Massa óssea (kg)' },
+  { chave: 'gordura_visceral', label: 'Gordura visceral' },
+  { chave: 'tmb_kcal', label: 'Taxa metabólica basal (kcal)' },
+  { chave: 'idade_metabolica', label: 'Idade metabólica' },
+  { chave: 'cintura_cm', label: 'Cintura (cm)' },
+  { chave: 'quadril_cm', label: 'Quadril (cm)' },
+  { chave: 'coxa_cm', label: 'Coxa (cm)' },
+  { chave: 'panturrilha_cm', label: 'Panturrilha (cm)' },
+  { chave: 'peito_cm', label: 'Peito (cm)' },
+  { chave: 'busto_cm', label: 'Busto (cm)' },
+  { chave: 'biceps_cm', label: 'Bíceps (cm)' }
+];
+
+let composicaoChartInstance = null;
+
+async function inicializarComposicaoCorporal(container) {
+  container.querySelector('#btn-toggle-composicao').addEventListener('click', () => {
+    const wrap = container.querySelector('#composicao-form-wrap');
+    if (wrap.hidden && wrap.innerHTML === '') {
+      wrap.innerHTML = composicaoFormHtml();
+      wrap.querySelector('#comp-salvar').addEventListener('click', () => salvarComposicao(container));
+    }
+    wrap.hidden = !wrap.hidden;
+  });
+
+  if (!state.composicaoMetrica) state.composicaoMetrica = 'peso_kg';
+  if (!state.composicaoJanelaMeses) state.composicaoJanelaMeses = 12;
+
+  const metricaSelect = container.querySelector('#composicao-metrica');
+  metricaSelect.value = state.composicaoMetrica;
+  metricaSelect.addEventListener('change', () => {
+    state.composicaoMetrica = metricaSelect.value;
+    desenharGraficoComposicao(container);
+  });
+
+  const janelaSelect = container.querySelector('#composicao-janela');
+  janelaSelect.value = String(state.composicaoJanelaMeses);
+  janelaSelect.addEventListener('change', () => {
+    state.composicaoJanelaMeses = parseInt(janelaSelect.value, 10);
+    desenharGraficoComposicao(container);
+  });
+
+  await desenharGraficoComposicao(container);
+  await renderListaComposicao(container);
+}
+
+function composicaoFormHtml() {
+  return `
+    <div class="composicao-form">
+      <div class="edit-row"><input type="date" id="comp-data" value="${hoje()}"></div>
+      <div class="edit-row">
+        <input type="text" inputmode="decimal" id="comp-peso" placeholder="Peso (kg)">
+        <input type="text" inputmode="decimal" id="comp-gordura" placeholder="% Gordura">
+      </div>
+      <div class="edit-row">
+        <input type="text" inputmode="decimal" id="comp-musculo" placeholder="% Massa muscular">
+        <input type="text" inputmode="decimal" id="comp-agua" placeholder="% Água">
+      </div>
+      <div class="edit-row">
+        <input type="text" inputmode="decimal" id="comp-ossea" placeholder="Massa óssea (kg)">
+        <input type="text" inputmode="decimal" id="comp-visceral" placeholder="Gordura visceral">
+      </div>
+      <div class="edit-row">
+        <input type="text" inputmode="decimal" id="comp-tmb" placeholder="TMB (kcal)">
+        <input type="text" inputmode="decimal" id="comp-idade-metab" placeholder="Idade metabólica">
+      </div>
+      <p class="ajuda-texto" style="margin: 4px 0;">Medidas (cm)</p>
+      <div class="edit-row">
+        <input type="text" inputmode="decimal" id="comp-cintura" placeholder="Cintura">
+        <input type="text" inputmode="decimal" id="comp-quadril" placeholder="Quadril">
+      </div>
+      <div class="edit-row">
+        <input type="text" inputmode="decimal" id="comp-coxa" placeholder="Coxa">
+        <input type="text" inputmode="decimal" id="comp-panturrilha" placeholder="Panturrilha">
+      </div>
+      <div class="edit-row">
+        <input type="text" inputmode="decimal" id="comp-peito" placeholder="Peito">
+        <input type="text" inputmode="decimal" id="comp-busto" placeholder="Busto">
+      </div>
+      <div class="edit-row">
+        <input type="text" inputmode="decimal" id="comp-biceps" placeholder="Bíceps">
+      </div>
+      <button class="btn-primary" id="comp-salvar" type="button" style="width: 100%; margin-top: 4px;">Salvar registro</button>
+    </div>
+  `;
+}
+
+async function salvarComposicao(container) {
+  const campo = (id) => parseNumeroDecimal(container.querySelector(id).value);
+  const data = container.querySelector('#comp-data').value || hoje();
+
+  const registro = {
+    data,
+    peso_kg: campo('#comp-peso'),
+    gordura_pct: campo('#comp-gordura'),
+    massa_muscular_pct: campo('#comp-musculo'),
+    agua_pct: campo('#comp-agua'),
+    massa_ossea_kg: campo('#comp-ossea'),
+    gordura_visceral: campo('#comp-visceral'),
+    tmb_kcal: campo('#comp-tmb'),
+    idade_metabolica: campo('#comp-idade-metab'),
+    cintura_cm: campo('#comp-cintura'),
+    quadril_cm: campo('#comp-quadril'),
+    coxa_cm: campo('#comp-coxa'),
+    panturrilha_cm: campo('#comp-panturrilha'),
+    peito_cm: campo('#comp-peito'),
+    busto_cm: campo('#comp-busto'),
+    biceps_cm: campo('#comp-biceps')
+  };
+
+  const temAlgumDado = Object.entries(registro).some(([chave, valor]) => chave !== 'data' && valor != null);
+  if (!temAlgumDado) return;
+
+  const existente = await db.registrosMedidas.where('data').equals(data).first();
+  if (existente) {
+    // So manda os campos preenchidos desta vez — update() faz merge por
+    // chave, entao um campo deixado em branco agora nao apaga o valor que
+    // ja tinha sido salvo numa vez anterior pra essa mesma data.
+    const camposPreenchidos = Object.fromEntries(
+      Object.entries(registro).filter(([chave, valor]) => chave === 'data' || valor != null)
+    );
+    await db.registrosMedidas.update(existente.id, camposPreenchidos);
+  } else {
+    await db.registrosMedidas.add(registro);
+  }
+
+  // Aproveita o peso, se preenchido, pra tambem alimentar o registro de
+  // peso normal — evita ter que lancar o mesmo numero duas vezes.
+  if (registro.peso_kg != null) {
+    const fase = await getFaseAtual();
+    const existentePeso = await db.registrosPeso.where('data').equals(data).first();
+    if (existentePeso) {
+      await db.registrosPeso.update(existentePeso.id, { peso_kg: registro.peso_kg, fase });
+    } else {
+      await db.registrosPeso.add({ data, peso_kg: registro.peso_kg, fase });
+    }
+    await desenharGraficoPeso(container);
+    await renderResumoPeso(container);
+    await renderTabelaPeso(container);
+  }
+
+  const wrap = container.querySelector('#composicao-form-wrap');
+  wrap.innerHTML = '';
+  wrap.hidden = true;
+
+  const toast = container.querySelector('#toast-composicao');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+
+  await desenharGraficoComposicao(container);
+  await renderListaComposicao(container);
+}
+
+async function desenharGraficoComposicao(container) {
+  const metricaChave = state.composicaoMetrica;
+  const metricaInfo = METRICAS_COMPOSICAO.find(m => m.chave === metricaChave);
+  const registros = await db.registrosMedidas.orderBy('data').toArray();
+  const pontos = registros.filter(r => r[metricaChave] != null).map(r => ({ data: r.data, valor: r[metricaChave] }));
+
+  const janela = calcularJanela(state.composicaoJanelaMeses);
+  const ticks = gerarTimelineSemanal(janela.inicio, janela.fim);
+  const valores = encaixarNaTimeline(pontos, ticks);
+  const labels = ticks.map(formatarDataBr);
+
+  const ctx = container.querySelector('#composicao-chart').getContext('2d');
+  if (composicaoChartInstance) composicaoChartInstance.destroy();
+
+  const corTexto = getComputedStyle(document.body).getPropertyValue('--text').trim() || '#222';
+  const corGrid = getComputedStyle(document.body).getPropertyValue('--border').trim() || '#ddd';
+
+  composicaoChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: metricaInfo ? metricaInfo.label : metricaChave,
+        data: valores,
+        borderColor: '#A2C4C9',
+        backgroundColor: 'rgba(162,196,201,0.2)',
+        spanGaps: false,
+        tension: 0.25,
+        pointRadius: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: corTexto } } },
+      scales: {
+        x: { ticks: { color: corTexto, maxRotation: 60, minRotation: 60, autoSkip: true, maxTicksLimit: 12 }, grid: { color: corGrid } },
+        y: { ticks: { color: corTexto }, grid: { color: corGrid } }
+      }
+    }
+  });
+}
+
+async function renderListaComposicao(container) {
+  const registros = await db.registrosMedidas.orderBy('data').reverse().limit(8).toArray();
+  const el = container.querySelector('#composicao-lista');
+
+  if (registros.length === 0) {
+    el.innerHTML = `<div class="empty-state">Nenhum registro de composição ainda.</div>`;
+    return;
+  }
+
+  const linhas = registros.map(r => {
+    const partes = METRICAS_COMPOSICAO
+      .filter(m => r[m.chave] != null)
+      .map(m => `${m.label}: ${r[m.chave]}`);
+    return `
+      <div class="composicao-item">
+        <div class="composicao-item-data">${formatarDataBr(r.data)}</div>
+        <div class="composicao-item-detalhes">${partes.join(' · ')}</div>
+      </div>
+    `;
+  }).join('');
+
+  el.innerHTML = `<h2>Últimos registros</h2>${linhas}`;
 }

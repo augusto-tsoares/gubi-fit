@@ -687,6 +687,31 @@ canvas { max-width: 100%; }
   font-size: 15px;
 }
 
+.composicao-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.composicao-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.composicao-item:last-child { border-bottom: none; }
+
+.composicao-item-data {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.composicao-item-detalhes {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
 .link-btn {
   background: none;
   border: none;
